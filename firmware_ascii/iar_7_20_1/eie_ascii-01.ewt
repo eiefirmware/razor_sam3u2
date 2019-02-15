@@ -181,6 +181,9 @@
         <name>$PROJ_DIR$\..\..\firmware_common\bsp\configuration.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\bsp\eief1-pcb-01.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\bsp\sam3u2-flash.icf</name>
       </file>
       <file>
@@ -195,6 +198,9 @@
       <file>
         <name>$PROJ_DIR$\..\bsp\eief1-pcb-01.c</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\bsp\kill_x_cycles.s</name>
+      </file>
     </group>
   </group>
   <group>
@@ -208,6 +214,21 @@
     <group>
       <name>Include</name>
       <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\adc12.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\antdefines.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\antmessage.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.h</name>
       </file>
       <file>
@@ -217,10 +238,22 @@
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\drivers\lcd_nhd-c0220biz.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\leds.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_spi.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.h</name>
@@ -235,6 +268,15 @@
     <group>
       <name>Source</name>
       <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\adc12.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.c</name>
       </file>
       <file>
@@ -244,10 +286,22 @@
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\drivers\lcd_nhd-c0220biz.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\leds.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_spi.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.c</name>
