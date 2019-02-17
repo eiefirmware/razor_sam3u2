@@ -33,7 +33,7 @@ u32 DebugPrintf(u8* u8String_);
 void DebugLineFeed(void);
 void DebugPrintNumber(u32 u32Number_);
 
-u8 DebugScanf(u8* au8Buffer_);
+u8 DebugScanf(u8* pu8Buffer_);
 
 void DebugSetPassthrough(void);
 void DebugClearPassthrough(void);
@@ -62,6 +62,13 @@ static void DebugCommandLedTestToggle(void);
 static void DebugLedTestCharacter(u8 u8Char_);
 static void DebugCommandSysTimeToggle(void);
 
+#ifdef EIE_ASCII /* EIE_ASCII-specific debug functions */
+#endif /* EIE_ASCII */
+
+#ifdef EIE_DOTMATRIX /* EIE_DOTMATRIX-specific debug functions  */
+static void DebugCommandCaptouchValuesToggle(void);
+#endif /* EIE_DOTMATRIX */
+
 
 /***********************************************************************************************************************
 * State Machine Declarations
@@ -87,17 +94,16 @@ static void DebugSM_Error(void);
 #define _DEBUG_TIME_WARNING_ENABLE     (u32)0x00000002      /*!< @brief G_u32DebugFlags set if system time check is enabled */
 #define _DEBUG_PASSTHROUGH             (u32)0x00000004      /*!< @brief G_u32DebugFlags set if Passthrough mode is enabled */
 
-#ifdef EIE1 /* EIE1-specific G_u32DebugFlags flags */
-#endif /* EIE1 */
+#ifdef EIE_ASCII /* EIE_ASCII-specific G_u32DebugFlags flags */
+#endif /* EIE_ASCII */
 
-#ifdef MPGL2 /* MPGL2-specific G_u32DebugFlags flags */
+#ifdef EIE_DOTMATRIX /* EIE_DOTMATRIX-specific G_u32DebugFlags flags */
 #define _DEBUG_CAPTOUCH_VALUES_ENABLE  (u32)0x00010000      /*!< @brief G_u32DebugFlags set if debug should print Captouch values */
-#endif /* MPGL2 */
+#endif /* EIE_DOTMATRIX */
 
 #define _DEBUG_FLAG_ERROR              (u32)0x80000000      /*!< @brief G_u32DebugFlags set if the debug Error state was reached */
 /* end of G_u32DebugFlags */
 
-#define MAX_TASK_NAME_SIZE              (u8)10              /*!< @brief Maximum string size for task name reported in SystemStatusReport */
 #define DEBUG_UART_TIMEOUT              (u32)2000           /*!< @brief Max time in ms for a command/message to be sent */
 
 /* Error codes */
@@ -116,6 +122,7 @@ static void DebugSM_Error(void);
 /* New commands must update the definitions below. Valid commands are in the range
 00 - 99.  Command name string is a maximum of DEBUG_CMD_NAME_LENGTH characters. */
 
+#ifdef EIE_ASCII
 #define DEBUG_COMMANDS          (u8)8   /*!< @brief Total number of debug commands */
 /*                              "0123456789ABCDEF0123456789ABCDEF"  Character position reference */
 #define DEBUG_CMD_NAME00        "Show debug command list         "  /* Command 0: List all commands */
@@ -126,6 +133,20 @@ static void DebugSM_Error(void);
 #define DEBUG_CMD_NAME05        "Dummy5                          "  /* Command 5: */
 #define DEBUG_CMD_NAME06        "Dummy6                          "  /* Command 6: */
 #define DEBUG_CMD_NAME07        "Dummy7                          "  /* Command 7: */
+#endif /* EIE_ASCII */
+
+#ifdef EIE_DOTMATRIX
+#define DEBUG_COMMANDS          8   /* Total number of debug commands */
+/*                              "0123456789ABCDEF0123456789ABCDEF"  Character position reference */
+#define DEBUG_CMD_NAME00        "Show debug command list         "  /* Command 0: List all commands */
+#define DEBUG_CMD_NAME01        "Toggle LED test                 "  /* Command 1: Test that allows characters to toggle LEDs */
+#define DEBUG_CMD_NAME02        "Toggle system timing warning    "  /* Command 2: Prints message if system tick has advanced more than 1 between main loop sleeps (i.e. tasks are taking too long) */
+#define DEBUG_CMD_NAME03        "Toggle Captouch value display   "  /* Command 2: Test that shows Captouch sense values on debug port */
+#define DEBUG_CMD_NAME04        "Dummy4                          "  /* Command 4: */
+#define DEBUG_CMD_NAME05        "Dummy5                          "  /* Command 5: */
+#define DEBUG_CMD_NAME06        "Dummy6                          "  /* Command 6: */
+#define DEBUG_CMD_NAME07        "Dummy7                          "  /* Command 7: */
+#endif /* EIE_ASCII */
 
 
 

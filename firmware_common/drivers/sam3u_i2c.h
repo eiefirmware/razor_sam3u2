@@ -116,7 +116,7 @@ Constants / Definitions
 /*! @publicsection */                                                                                            
 /*-------------------------------------------------------------------------------------------------------------------*/
 bool TwiReadData(u8 u8SlaveAddress_, u8* pu8RxBuffer_, u32 u32Size_);
-u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* u8Data_, TwiStopType Send_);
+u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType eStop_);
 
 
 /*-------------------------------------------------------------------------------------------------------------------*/

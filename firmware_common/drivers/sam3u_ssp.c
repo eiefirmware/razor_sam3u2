@@ -486,7 +486,7 @@ Requires:
 
 @param psSspPeripheral_ is the SSP peripheral to use and it has already been requested.
 @param u32Size_ is the number of bytes in the data array
-@param u8Data_ points to the first byte of the data array
+@param pu8Data_ points to the first byte of the data array
 
 Promises:
 - adds the data message at psSspPeripheral_->psTransmitBuffer that will be sent by the SSP application
@@ -570,7 +570,7 @@ Requires:
 - Master mode 
 
 @param psSspPeripheral_ is the SSP peripheral to use and it has already been requested.
-@param u32Size_ is the number of bytes to receive
+@param u16Size_ is the number of bytes to receive
 
 Promises:
 - Returns FALSE if the message is too big, or the peripheral already has a read request
@@ -768,6 +768,7 @@ void SspManualMode(void)
   /* Run the SSP state machine so all SSP peripherals send their current message */  
   while(SSP_u32Flags & _SSP_MANUAL_MODE)
   {
+    WATCHDOG_BONE();
     Ssp_pfnStateMachine();
     MessagingRunActiveState();
     

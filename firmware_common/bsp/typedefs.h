@@ -85,6 +85,12 @@ typedef struct
   GpioActiveType eActiveState;    /*!< @brief Pin hardware active type */
 }PinConfigurationType;
 
+/*! 
+@struct ErrorStatus
+@brief Standarized, self-documenting error codes.
+*/
+typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
+
 
 #endif /* __TYPEDEFS_H */
 

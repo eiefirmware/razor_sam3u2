@@ -24,7 +24,7 @@ TYPES
 
 PUBLIC FUNCTIONS
 - void LcdCommand(u8 u8Command_)
-- void LcdMessage(u8 u8Address_, u8 *u8Message_)
+- void LcdMessage(u8 u8Address_, u8* pu8Message_)
 - void LcdClearChars(u8 u8Address_, u8 u8CharactersToClear_)
 
 PROTECTED FUNCTIONS
@@ -116,7 +116,7 @@ void LcdCommand(u8 u8Command_)
 
 
 /*!---------------------------------------------------------------------------------------------------------------------
-@fn void LcdMessage(u8 u8Address_, u8 *u8Message_)
+@fn void LcdMessage(u8 u8Address_, u8* pu8Message_)
 
 @brief Sends a text message to the LCD to be printed at the address specified.  
 
@@ -131,14 +131,15 @@ LcdMessage(LINE1_START_ADDR, au8Message);
 Requires:
 - LCD is initialized
 
-@param u8Message_ is a pointer to a NULL-terminated C-string
+@param u8Address_ is desired starting address on the display
+@param pu8Message_ is a pointer to a NULL-terminated C-string
 
 Promises:
 - Message to set cursor address in the LCD is queued, then message data 
   is queued to the LCD to be displayed. 
 
 */
-void LcdMessage(u8 u8Address_, u8 *u8Message_)
+void LcdMessage(u8 u8Address_, u8* pu8Message_)
 { 
   u8 u8Index; 
   static u8 au8LCDMessage[U8_LCD_MESSAGE_OVERHEAD_SIZE + U8_LCD_MAX_MESSAGE_SIZE] = {LCD_CONTROL_DATA};
@@ -148,9 +149,9 @@ void LcdMessage(u8 u8Address_, u8 *u8Message_)
   
   /* Fill the message */
   u8Index = 1;
-  while(*u8Message_ != '\0')
+  while(*pu8Message_ != '\0')
   {
-    au8LCDMessage[u8Index++] = *u8Message_++;
+    au8LCDMessage[u8Index++] = *pu8Message_++;
   }
     
   /* Queue the message */

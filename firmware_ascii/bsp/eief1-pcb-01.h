@@ -16,6 +16,7 @@ Bookmarks:
 @@@@@ Watchdog, Power Control, Clock, and Systick setup values
 ##### GPIO initial setup values
 $$$$$ PWM setup values
+%%%%% Template register settings
 
 ***********************************************************************************************************************/
 /*! @endcond */
@@ -66,7 +67,7 @@ typedef enum {BUTTON0 = 0, BUTTON1, BUTTON2, BUTTON3, NOBUTTON} ButtonNameType;
 @enum BuzzerChannelType
 @brief Logical names for buzzers in the system.
 
-These definitions  correspond to the Channel ID in the PWM peripheral 
+These definitions correspond to the Channel ID in the PWM peripheral 
 */
 typedef enum {BUZZER1 = AT91C_PWMC_CHID0, BUZZER2=AT91C_PWMC_CHID1} BuzzerChannelType;
 
@@ -237,8 +238,6 @@ void PWMSetupAudio(void);
 
 
 /*! @cond DOXYGEN_EXCLUDE */
-
-
 
 /***********************************************************************************************************************
 @@@@@ Watchdog, Power Control, Clock, and Systick setup values
@@ -1606,6 +1605,7 @@ We don't want to lock access to the GPIO registers anyway, so we won't use this 
 /***********************************************************************************************************************
 $$$$$ PWM setup values
 ***********************************************************************************************************************/
+
 #define PWM_CLK_INIT (u32)0x00000000
 /*
     31 [0] Reserved
@@ -1760,16 +1760,9 @@ In general, the period is 6000000 / frequency and duty is always period / 2.
 #define PWM_CDTY1_INIT  (u32)(PWM_CPRD1_INIT << 1)
 
 
-
-#endif /* __EIEF1 */
-
-
-
-
-/*--------------------------------------------------------------------------------------------------------------------*/
-/* End of File                                                                                                        */
-/*--------------------------------------------------------------------------------------------------------------------*/
-
+/***********************************************************************************************************************
+%%%%% Template register settings
+***********************************************************************************************************************/
 
 #define TEMPLATE_INIT (u32)0x00000000
 /*
@@ -1857,7 +1850,7 @@ In general, the period is 6000000 / frequency and duty is always period / 2.
     00 [] PA_00_TP54 
 */
 
-#define PIOB_OWER_INIT (u32)0x001FFC00
+#define TEMPLATE_PIOB_INIT (u32)0x00000000
 /*
     31 [] PB_31_
     30 [] PB_30_
@@ -1900,4 +1893,10 @@ In general, the period is 6000000 / frequency and duty is always period / 2.
     00 [] PB_00_BUTTON1 
 */
 
+/*! @endcond */
 
+#endif /* __EIEF1 */
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/* End of File                                                                                                        */
+/*--------------------------------------------------------------------------------------------------------------------*/

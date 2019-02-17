@@ -24,7 +24,7 @@ Runtime switches
 ***********************************************************************************************************************/
 //#define STARTUP_SOUND               /*!< Define to include buzzer sound on startup */
 
-//#define MPGL2_R01                   /*!< Use with MPGL2-EHDW-01 revision board */
+//#define EIE_DOTMATRIX_R01           /*!< Use with MPGL2-EHDW-01 revision board */
 
 
 /**********************************************************************************************************************
@@ -56,19 +56,23 @@ Includes
 #include "utilities.h"
 
 /* EIEF1-PCB-01 specific header files */
-#ifdef EIE1
+#ifdef EIE_ASCII
 #include "eief1-pcb-01.h"
 #include "lcd_nhd-c0220biz.h"
-#endif /* EIE1 */
+#endif /* EIE_ASCII */
 
-#ifdef MPGL2
-/* MPGL2-specific header files */
-#ifdef MPGL2_R01
+#ifdef EIE_DOTMATRIX
+/* EIE_DOTMATRIX-specific header files */
+#ifdef EIE_DOTMATRIX_R01
 #include "mpgl2-ehdw-01.h"
 #else
 #include "mpgl2-ehdw-02.h"
-#endif /* MPGL2_R01 */
-#endif /* MPGL2 */
+#endif /* EIE_DOTMATRIX_R01 */
+
+#include "captouch.h"
+#include "lcd_NHD-C12864LZ.h"
+#include "lcd_bitmaps.h"
+#endif /* EIE_DOTMATRIX */
 
 /* Common driver header files */
 #include "antmessage.h"
@@ -105,12 +109,12 @@ Includes
 #define BLADE_SPI                   SPI0
 #define BLADE_I2C                   TWI0
 
-#ifdef EIE1
+#ifdef EIE_ASCII
 #define LCD_I2C                     TWI0
 #define SD_SSP                      USART1
 #endif
 
-#ifdef MPGL2
+#ifdef EIE_DOTMATRIX
 #define LCD_SPI                     USART1
 #endif
 
@@ -167,7 +171,7 @@ Includes
 
 /* %SSP% Configuration */
 
-#ifdef EIE1
+#ifdef EIE_ASCII
 /* SD SPI Peripheral Allocation (USART1) */
 #define SD_BASE_PORT                AT91C_BASE_PIOA
 #define SD_CS_PIN                   PA_08_SD_CS_MCDA3
@@ -178,7 +182,21 @@ Includes
 #define USART1_US_BRGR_INIT         SD_SPI_US_BRGR_INIT
 
 #define SSP1_IRQHandler             USART1_IrqHandler
-#endif /* EIE1 */
+#endif /* EIE_ASCII */
+
+#ifdef EIE_DOTMATRIX
+/* %SSP% Configuration */
+/* LCD SPI Peripheral Allocation (USART1) */
+#define LCD_BASE_PORT               AT91C_BASE_PIOB
+#define LCD_CS_PIN                  PB_12_LCD_CS
+#define USART1_US_CR_INIT           LCD_US_CR_INIT
+#define USART1_US_MR_INIT           LCD_US_MR_INIT
+#define USART1_US_IER_INIT          LCD_US_IER_INIT
+#define USART1_US_IDR_INIT          LCD_US_IDR_INIT
+#define USART1_US_BRGR_INIT         LCD_US_BRGR_INIT
+
+#define SSP1_IRQHandler             USART1_IrqHandler
+#endif /* EIE_DOTMATRIX */
 
 
 /* ANT SPI Peripheral Allocation (USART2) */
@@ -717,7 +735,7 @@ DLYBCT = 4.5 (round up to 5)
 /*! @cond DOXYGEN_EXCLUDE */
 
 /*----------------------------------------------------------------------------------------------------------------------
-SD USART Setup in SSP mode
+EIE_ASCII ASCII board SD USART Setup in SSP mode
 
 SPI mode to communicate with an SPI SD card. 
 */
@@ -851,6 +869,171 @@ BAUD desired = 1 Mbps
 => CD = 48
 */
 #define SD_SPI_US_BRGR_INIT (u32)0x00000030  
+/*
+    31-20 [0] Reserved
+
+    19 [0] Reserved
+    18 [0] FP baud disabled
+    17 [0] "
+    16 [0] "
+
+    15 [0] CD = 48 = 0x30
+    14 [0] "
+    13 [0] "
+    12 [0] "
+
+    11 [0] "
+    10 [0] "
+    09 [0] "
+    08 [0] "
+
+    07 [0] "
+    06 [0] "
+    05 [1] "
+    04 [1] "
+
+    03 [0] "
+    02 [0] "
+    01 [0] "
+    00 [0] "
+*/
+
+
+/*----------------------------------------------------------------------------------------------------------------------
+EIE_DOTMATRIX Dot Matrix LCD USART Setup in SSP mode
+
+SPI mode to communicate with an SPI LCD screen. 
+*/
+/* USART Control Register - Page 734 */
+#define LCD_US_CR_INIT (u32)0x00000060
+/*
+    31 - 20 [0] Reserved
+
+    19 [0] RTSDIS/RCS no release/force RTS to 1
+    18 [0] RTSEN/FCS no drive/force RTS to 0
+    17 [0] DTRDIS no drive DTR to 1
+    16 [0] DTREN no drive DTR to 0
+
+    15 [0] RETTO no restart timeout
+    14 [0] RSTNACK N/A
+    13 [0] RSTIT N/A
+    12 [0] SENDA N/A
+
+    11 [0] STTTO no start time-out
+    10 [0] STPBRK no stop break
+    09 [0] STTBRK no transmit break
+    08 [0] RSTSTA status bits not reset
+
+    07 [0] TXDIS transmitter not disabled
+    06 [1] TXEN transmitter enabled
+    05 [1] RXDIS receiver disabled
+    04 [0] RXEN receiver not enabled
+
+    03 [0] RSTTX not reset
+    02 [0] RSTRX not reset
+    01 [0] Reserved
+    00 [0] "
+*/
+
+/* USART Mode Register - page 737 */
+#define LCD_US_MR_INIT (u32)0x004518CE
+/*
+    31 [0] ONEBIT start frame delimiter is COMMAND or DATA SYNC
+    30 [0] MODSYNC Manchester start bit N/A
+    29 [0] MAN Machester encoding disabled
+    28 [0] FILTER no filter on Rx line
+
+    27 [0] Reserved
+    26 [0] MAX_ITERATION (ISO7816 mode only)
+    25 [0] "
+    24 [0] "
+
+    23 [0] INVDATA data is not inverted
+    22 [1] VAR_SYNC sync field is updated on char to US_THR
+    21 [0] DSNACK delicious! NACK is sent on ISO line immeidately on parity error
+    20 [0] INACK transmission starts as oons as byte is written to US_THR
+
+    19 [0] OVER 16x oversampling
+    18 [1] CLKO USART drives the SCK pin
+    17 [0] MODE9 CHRL defines char length
+    16 [1] CPOL clock is high when inactive
+
+    15 [0] CHMODE normal mode
+    14 [0] "
+    13 [0] NBSTOP N/A
+    12 [1] "
+
+    11 [1] PAR no parity
+    10 [0] "
+    09 [0] "
+    08 [0] CPHA data captured on leading edge of SPCK (first high to low transition does not count)
+
+    07 [1] CHRL 8 bits
+    06 [1] "
+    05 [0] USCLKS MCK
+    04 [0] "
+
+    03 [1] USART_MODE SPI Master
+    02 [1] "
+    01 [1] "
+    00 [0] "
+*/
+
+
+/* USART Interrupt Enable Register - Page 741 */
+#define LCD_US_IER_INIT (u32)0x00000000
+/*
+    31 [0] Reserved
+    30 [0] "
+    29 [0] "
+    28 [0] "
+
+    27 [0] "
+    26 [0] "
+    25 [0] "
+    24 [0] MANE Manchester Error interrupt not enabled
+
+    23 [0] Reserved
+    22 [0] "
+    21 [0] "
+    20 [0] "
+
+    19 [0] CTSIC Clear to Send Change interrupt not enabled
+    18 [0] DCDIC Data Carrier Detect Change interrupt not enabled
+    17 [0] DSRIC Data Set Ready Change interrupt not enabled
+    16 [0] RIIC Ring Inidicator Change interrupt not enabled
+
+    15 [0] Reserved
+    14 [0] "
+    13 [0] NACK Non Ack interrupt not enabled
+    12 [0] RXBUFF Reception Buffer Full (PDC) interrupt not enabled
+
+    11 [0] TXBUFE Transmission Buffer Empty (PDC) interrupt not enabled
+    10 [0] ITER/UNRE Max number of Repetitions Reached interrupt not enabled
+    09 [0] TXEMPTY Transmitter Empty interrupt not enabled (yet)
+    08 [0] TIMEOUT Receiver Time-out interrupt not enabled
+
+    07 [0] PARE Parity Error interrupt not enabled
+    06 [0] FRAME Framing Error interrupt not enabled
+    05 [0] OVRE Overrun Error interrupt not enabled
+    04 [0] ENDTX End of Transmitter Transfer (PDC) interrupt not enabled for now
+
+    03 [0] ENDRX End of Receiver Transfer (PDC) interrupt not enabled
+    02 [0] RXBRK Break Received interrupt not enabled
+    01 [0] TXRDY Transmitter Ready interrupt not enabled
+    00 [0] RXRDY Receiver Ready interrupt not enabled
+*/
+
+/* USART Interrupt Disable Register - Page 743 */
+#define LCD_US_IDR_INIT (u32)~LCD_US_IER_INIT
+
+/* USART Baud Rate Generator Register - Page 752
+BAUD = MCK / CD 
+=> CD = MCK / BAUD
+BAUD desired = 1 Mbps
+=> CD = 48
+*/
+#define LCD_US_BRGR_INIT (u32)0x00000030  /* VERIFY SPI CLOCK! */
 /*
     31-20 [0] Reserved
 
@@ -1025,7 +1208,7 @@ or 2MHz, so no issues.
 /*----------------------------------------------------------------------------------------------------------------------
 I²C Master mode for EiE development board (TWI0)
 ASCII: LCD and Blade
-Dot Matrix: Blade and R01 MPGL2 accelerometer
+Dot Matrix: Blade and R01 EIE_DOTMATRIX accelerometer
 */
 
 /* Control Register */

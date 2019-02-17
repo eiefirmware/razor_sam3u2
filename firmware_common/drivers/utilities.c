@@ -119,6 +119,8 @@ bool IsTimeUp(u32 *pu32SavedTick_, u32 u32Period_)
 
 Requires:
 - Standard ASCII table is in use
+
+@param u8Char_ is the number to convert
  
 Promises:
 - If valid 0-9, A-F or a-f, returns the numerical value of the ASCII char
@@ -150,7 +152,7 @@ u8 ASCIIHexCharToNum(u8 u8Char_)
 Requires:
 - Standard ASCII table is in use
 
-@param u8Char is a number that is to be returned in uppercase ASCII
+@param u8Char_ is a number that is to be returned in uppercase ASCII
 
 Promises:
 - If valid 0-15, returns the corresponding ASCII hex char 0-9, A-F
@@ -185,7 +187,7 @@ u8 HexToASCIICharUpper(u8 u8Char_)
 Requires:
 - Standard ASCII table is in use
 
-@param u8Char is a number that is to be returned in lowercase ASCII
+@param u8Char_ is a number that is to be returned in lowercase ASCII
  
 Promises:
 - If valid 0-15, returns the corresponding ASCII hex char 0-9, a-f

@@ -22,6 +22,12 @@ TYPES
   GREEN, YELLOW, ORANGE, RED, 
   LCD_RED, LCD_GREEN, LCD_BLUE}
 
+ (from mpgl2-ehdw-02):
+ {RED0,   RED1,   RED2,   RED3, 
+  GREEN0, GREEN1, GREEN2, GREEN3, 
+  BLUE0,  BLUE1,  BLUE2,  BLUE3}
+
+
 - LedRateType:
   {LED_0HZ = 0, LED_0_5HZ = 1000, LED_1HZ = 500, LED_2HZ = 250, LED_4HZ = 125, LED_8HZ = 63,
    LED_PWM_0 = 0,   LED_PWM_5 = 1,   LED_PWM_10 = 2,  LED_PWM_15 = 3,  LED_PWM_20 = 4, 
@@ -254,7 +260,7 @@ void LedBlink(LedNameType eLED_, LedRateType eBlinkRate_)
 
 
 /*!----------------------------------------------------------------------------------------------------------------------
-@fn void LedPWM(LedNumberType eLED_, LedRateType ePwmRate_)
+@fn void LedPWM(LedNameType eLED_, LedRateType ePwmRate_)
 
 @brief Sets an LED to PWM mode with the rate given.
 
@@ -293,6 +299,7 @@ void LedPWM(LedNameType eLED_, LedRateType ePwmRate_)
 /*! @protectedsection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#ifdef EIE_ASCII
 /*!----------------------------------------------------------------------------------------------------------------------
 @fn void LedInitialize(void)
 
@@ -396,6 +403,107 @@ void LedInitialize(void)
   }
   
 } /* end LedInitialize() */
+#endif /* EIE_ASCII */
+
+
+#ifdef EIE_DOTMATRIX
+/*!----------------------------------------------------------------------------------------------------------------------
+@fn void LedInitialize(void)
+
+@brief Initialization of LED system parameters and visual LED check.
+
+
+Requires:
+- 
+
+Promises:
+- Led_asControl is initialized (all LEDs in LED_NORMAL_MODE)
+
+*/
+void LedInitialize(void)
+{
+  u32 u32Timer;
+  u8  u8Index;
+
+  u32 u32Buzzer1Frequency = 4000;
+  u32 u32StepSize = u32Buzzer1Frequency / 20;
+
+  /* Initialize the LED control array */
+  for(u8 i = 0; i < U8_TOTAL_LEDS; i++)
+  {
+    LedPWM( (LedNameType)i, LED_PWM_100);
+  }
+  
+  /* Fade the LEDS out */
+  for(u8Index = 20; u8Index > 0; u8Index--)
+  {
+#ifdef STARTUP_SOUND
+    /* Configure Buzzers to provide some audio during start up */
+    PWMAudioSetFrequency(BUZZER1, u32Buzzer1Frequency);
+    PWMAudioOn(BUZZER1);
+#endif /* STARTUP_SOUND */
+    
+    /* Spend a little bit of time in each level of intensity */
+    for(u16 j = 20; j > 0; j--)
+    {
+      u32Timer = G_u32SystemTime1ms;
+      while( !IsTimeUp(&u32Timer, 1) );
+      LedSM_Idle();
+    }
+    /* Pause for a bit on the first iteration to show the LEDs on for little while */
+    if(u8Index == 20)
+    {
+      while( !IsTimeUp(&u32Timer, 200) );
+    }
+    
+    /* Set the LED intensity for the next iteration */
+    for(u8 j = 0; j < U8_TOTAL_LEDS; j++)
+    {
+      Led_asControl[j].eRate = (LedRateType)(u8Index - 1);
+    }
+    
+    /* Set the buzzer frequency for the next iteration */
+    u32Buzzer1Frequency -= u32StepSize;
+  }
+
+  /* Final update to set last state, hold for a short period */
+  LedSM_Idle();
+  while( !IsTimeUp(&u32Timer, 200) );
+  
+#ifdef STARTUP_SOUND
+  /* Turn off the buzzers */
+  PWMAudioOff(BUZZER1);
+#endif /* STARTUP_SOUND */
+ 
+
+  /* Initialize the LED control array */
+  for(u8 i = 0; i < U8_TOTAL_LEDS; i++)
+  {
+    Led_asControl[i].eMode = LED_NORMAL_MODE;
+    Led_asControl[i].eRate = LED_0HZ;
+    Led_asControl[i].u16Count = 0;
+    Led_asControl[i].eCurrentDuty = LED_PWM_DUTY_LOW;
+  }
+
+  /* Backlight on */
+  LedOn(LCD_BL);
+
+  /* If good initialization, set state to Idle */
+  if( 1 )
+  {
+    /* Final setup and report that LED system is ready */
+    G_u32ApplicationFlags |= _APPLICATION_FLAGS_LED;
+    DebugPrintf("LED functions ready\n\r");
+    Led_StateMachine = LedSM_Idle;
+  }
+  else
+  {
+    /* The task isn't properly initialized, so shut it down and don't run */
+    Led_StateMachine = LedSM_Error;
+  }
+  
+} /* end LedInitialize() */
+#endif /* EIE_DOTMATRIX */
 
 
 /*!----------------------------------------------------------------------------------------------------------------------

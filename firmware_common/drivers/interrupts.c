@@ -106,8 +106,7 @@ Requires:
 Promises:
 - System tick interrupt pending flag is cleared
 - G_u32SystemFlags _SYSTEM_SLEEPING cleared
-
-@param G_u32SystemTime1ms counter is incremented by 1
+- G_u32SystemTime1ms counter is incremented by 1
 
 */
 void SysTick_Handler(void)
@@ -256,6 +255,7 @@ Promises:
 */
 void HardFault_Handler(void)
 {
+#ifdef EIE_ASCII
   LedOff(WHITE);
   LedOff(CYAN);
   LedOff(PURPLE);
@@ -264,7 +264,31 @@ void HardFault_Handler(void)
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOn(RED);
+#endif
 
+#ifdef EIE_DOTMATRIX
+#ifdef EIE_DOTMATRIX_R01  
+  LedOff(BLUE);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOn(RED);
+#else
+  LedOff(BLUE0);
+  LedOff(BLUE1);
+  LedOff(BLUE2);
+  LedOff(BLUE3);
+  LedOff(GREEN0);
+  LedOff(GREEN1);
+  LedOff(GREEN2);
+  LedOff(GREEN3);
+  LedOff(RED1);
+  LedOff(RED2);
+  LedOff(RED3);
+  
+  LedOn(RED0);
+#endif /* EIE_DOTMATRIX_R01 */
+#endif /* EIE_DOTMATRIX */
+  
   while(1);  /* !!!!! update to log and/or report error and/or restart */
   
 } /* end HardFault_Handler() */

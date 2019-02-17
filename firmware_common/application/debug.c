@@ -47,7 +47,7 @@ PUBLIC FUNCTIONS
 - u32 DebugPrintf(u8* u8String_)
 - void DebugLineFeed(void)
 - void DebugPrintNumber(u32 u32Number_)
-- u8 DebugScanf(u8* au8Buffer_)
+- u8 DebugScanf(u8* pu8Buffer_)
 - void DebugSetPassthrough(void)
 - void DebugClearPassthrough(void)
 
@@ -73,6 +73,8 @@ extern volatile u32 G_u32SystemTime1ms;                /*!< @brief From main.c *
 extern volatile u32 G_u32SystemTime1s;                 /*!< @brief From main.c */
 extern volatile u32 G_u32SystemFlags;                  /*!< @brief From main.c */
 extern volatile u32 G_u32ApplicationFlags;             /*!< @brief From main.c */
+
+extern const u8 G_aau8AppShortNames[NUMBER_APPLICATIONS][MAX_TASK_NAME_SIZE]; /*!< @brief From main.c */
 
 extern u8 G_au8UtilMessageON[];                        /*!< @brief From utilities.c */
 extern u8 G_au8UtilMessageOFF[];                       /*!< @brief From utilities.c */
@@ -101,6 +103,7 @@ static u8 Debug_u8Command;                               /*!< @brief A validated
 
 /*! @brief Add commands by updating debug.h in the Command-Specific Definitions section, then update this list
 with the function name to call for the corresponding command: */
+#ifdef EIE_ASCII
 DebugCommandType Debug_au8Commands[DEBUG_COMMANDS] = 
 { {DEBUG_CMD_NAME00, DebugCommandPrepareList},
   {DEBUG_CMD_NAME01, DebugCommandLedTestToggle},
@@ -113,6 +116,22 @@ DebugCommandType Debug_au8Commands[DEBUG_COMMANDS] =
 };
 
 static u8 Debug_au8StartupMsg[] = "\n\n\r*** RAZOR SAM3U2 ASCII LCD DEVELOPMENT BOARD ***\n\n\r";
+#endif /* EIE_ASCII */
+
+#ifdef EIE_DOTMATRIX
+DebugCommandType Debug_au8Commands[DEBUG_COMMANDS] = 
+{ {DEBUG_CMD_NAME00, DebugCommandPrepareList},
+  {DEBUG_CMD_NAME01, DebugCommandLedTestToggle},
+  {DEBUG_CMD_NAME02, DebugCommandSysTimeToggle},
+  {DEBUG_CMD_NAME03, DebugCommandCaptouchValuesToggle},
+  {DEBUG_CMD_NAME04, DebugCommandDummy},
+  {DEBUG_CMD_NAME05, DebugCommandDummy},
+  {DEBUG_CMD_NAME06, DebugCommandDummy},
+  {DEBUG_CMD_NAME07, DebugCommandDummy} 
+};
+
+static u8 Debug_au8StartupMsg[] = "\n\n\r*** RAZOR SAM3U2 DOT MATRIX LCD DEVELOPMENT BOARD ***\n\n\r";
+#endif /* EIE_DOTMATRIX */
 
 
 /***********************************************************************************************************************
@@ -264,7 +283,7 @@ void DebugPrintNumber(u32 u32Number_)
 
 
 /*!----------------------------------------------------------------------------------------------------------------------
-@fn u8 DebugScanf(u8* au8Buffer_)
+@fn u8 DebugScanf(u8* pu8Buffer_)
 
 @brief Copies G_u8DebugScanfCharCount characters from G_au8DebugScanfBuffer to a target array 
 so the input can be saved.  
@@ -282,22 +301,24 @@ u8 u8NumChars;
 u8NumChars = DebugScanf(u8MyBuffer);
 
 Requires:
-@param G_u8DebugScanfCharCount holds the number of characters in the G_au8DebugScanfBuffer
-@param au8Buffer_ points to an array large enough to hold G_u8DebugScanfCharCount characters
+- G_u8DebugScanfCharCount holds the number of characters in the G_au8DebugScanfBuffer
+
+@param pu8Buffer_ points to an array large enough to hold G_u8DebugScanfCharCount characters
 
 Promises:
-@param au8Buffer_ receives G_u8DebugScanfCharCount characters 
-@param G_au8DebugScanfBuffer[i] = '\0', where 0 <= i <= DEBUG_SCANF_BUFFER_SIZE
-@param G_u8DebugScanfCharCount = 0
+- pu8Buffer_ receives G_u8DebugScanfCharCount characters 
+- G_au8DebugScanfBuffer[i] = '\0', where 0 <= i <= DEBUG_SCANF_BUFFER_SIZE
+- G_u8DebugScanfCharCount = 0
+
 */
-u8 DebugScanf(u8* au8Buffer_)
+u8 DebugScanf(u8* pu8Buffer_)
 {
   u8 u8Temp = G_u8DebugScanfCharCount;
   
   /* Copy the characters, clearing as we go */
   for(u8 i = 0; i < G_u8DebugScanfCharCount; i++)
   {
-    *(au8Buffer_ + i) = G_au8DebugScanfBuffer[i];
+    *(pu8Buffer_ + i) = G_au8DebugScanfBuffer[i];
     G_au8DebugScanfBuffer[i] = '\0';
   }
   
@@ -371,7 +392,7 @@ status flag and then SystemStatus report could display this.
 When a new task is added:
 - G_u32ApplicationFlags (configuration.h) should get a new flag for the task
 - NUMBER_APPLICATIONS (configuration.h) should be incremented
-- aau8AppShortNames list should get a message string for the task name. This
+- G_aau8AppShortNames list should get a message string for the task name. This
 list must match the order of the flags in G_u32ApplicationFlags.
 
 This function can be used if the system is in initialization state 
@@ -392,8 +413,6 @@ void SystemStatusReport(void)
   u32 u32TaskFlagMaskBit = (u32)0x01;
   bool bNoFailedTasks = TRUE;
 
-  u8 aau8AppShortNames[NUMBER_APPLICATIONS][MAX_TASK_NAME_SIZE] = {"LED", "BUTTON", "DEBUG", "TIMER"};
-
 
   /* Announce init complete then report any tasks that failed init */
   DebugPrintf(au8SystemReady);
@@ -403,7 +422,7 @@ void SystemStatusReport(void)
     if( !(u32TaskFlagMaskBit & G_u32ApplicationFlags) )
     {
       bNoFailedTasks = FALSE;
-      DebugPrintf(&aau8AppShortNames[i][0]);
+      DebugPrintf((u8*)&G_aau8AppShortNames[i][0]);
       DebugLineFeed();
     }
     
@@ -658,6 +677,7 @@ static void DebugCommandDummy(void)
 } /* end DebugCommandDummy() */
 
 
+#ifdef EIE_ASCII
 /*!----------------------------------------------------------------------------------------------------------------------
 @fn static void DebugCommandLedTestToggle(void)
 
@@ -709,7 +729,7 @@ static void DebugCommandLedTestToggle(void)
 Only responds to UPPER CASE characters.
 This implementation is specific to the target hardware.
 
-For EIE1: W, P, B, C, G, Y, O, R
+For EIE_ASCII: W, P, B, C, G, Y, O, R
 
 Requires:
 @param u8Char_ is the character to check
@@ -787,6 +807,103 @@ static void DebugLedTestCharacter(u8 u8Char_)
   }
     
 } /* end DebugCommandLedTestToggle() */
+#endif /* EIE_ASCII */
+
+
+#ifdef EIE_DOTMATRIX
+/*!----------------------------------------------------------------------------------------------------------------------
+@fn static void DebugCommandLedTestToggle(void)
+
+@brief Toggles and reports the active state of the LED test.
+
+This implementation is specific to the target hardware.
+
+Requires:
+- NONE
+
+Promises:
+@param G_u32DebugFlags flag _DEBUG_LED_TEST_ENABLE is toggled
+
+*/
+static void DebugCommandLedTestToggle(void)
+{
+  u8 au8LedTestMessage[] = "\n\rLed Test ";
+  
+  /* Print message and toggle the flag */
+  DebugPrintf(au8LedTestMessage);
+  if(G_u32DebugFlags & _DEBUG_LED_TEST_ENABLE)
+  {
+    G_u32DebugFlags &= ~_DEBUG_LED_TEST_ENABLE;
+    DebugPrintf(G_au8UtilMessageOFF);
+  }
+  else
+  {
+    G_u32DebugFlags |= _DEBUG_LED_TEST_ENABLE;
+    DebugPrintf(G_au8UtilMessageON);
+    
+    LedOn(RED0);
+    LedOn(RED1);
+    LedOn(RED2);
+    LedOn(RED3);
+    LedOn(GREEN0);
+    LedOn(GREEN1);
+    LedOn(GREEN2);
+    LedOn(GREEN3);
+    LedOn(BLUE0);
+    LedOn(BLUE1);
+    LedOn(BLUE2);
+    LedOn(BLUE3);
+  }
+  
+} /* end DebugCommandLedTestToggle() */
+
+
+/*!----------------------------------------------------------------------------------------------------------------------
+@fn static void DebugLedTestCharacter(u8 u8Char_)
+
+@brief Checks the character and toggles associated LED if applicable.
+
+Only responds to UPPER CASE characters.
+This implementation is specific to the target hardware.
+
+For EIE_DOTMATRIX: R, G, B
+
+Requires:
+@param u8Char_ is the character to check
+
+Promises:
+- If u8Char_ is a valid toggling character, the corresponding LEDs will be toggled.
+
+*/
+static void DebugLedTestCharacter(u8 u8Char_)
+{
+  /* Check the char to see if an LED group should be toggled */  
+  if(u8Char_ == 'R')
+  {
+    LedToggle(RED0);
+    LedToggle(RED1);
+    LedToggle(RED2);
+    LedToggle(RED3);
+  }  
+  
+  if(u8Char_ == 'G')
+  {
+    LedToggle(GREEN0);
+    LedToggle(GREEN1);
+    LedToggle(GREEN2);
+    LedToggle(GREEN3);
+  }  
+
+  if(u8Char_ == 'B')
+  {
+    LedToggle(BLUE0);
+    LedToggle(BLUE1);
+    LedToggle(BLUE2);
+    LedToggle(BLUE3);
+  }  
+
+} /* end DebugCommandLedTestToggle() */
+#endif /* EIE_DOTMATRIX */
 
 
 /*!----------------------------------------------------------------------------------------------------------------------
@@ -819,6 +936,42 @@ static void DebugCommandSysTimeToggle(void)
   }
   
 } /* end DebugCommandSysTimeToggle() */
+
+/* EIE_DOTMATRIX only tests */
+#ifdef EIE_DOTMATRIX 
+/*!----------------------------------------------------------------------------------------------------------------------
+@fn DebugCommandCaptouchValuesToggle
+
+@brief Toggles printing the current Captouch horizontal and vertical values.
+
+Requires:
+- NONE
+
+Promises:
+@param G_u32DebugFlags flag _DEBUG_CAPTOUCH_VALUES_ENABLE is toggled
+
+*/
+static void DebugCommandCaptouchValuesToggle(void)
+{
+  u8 au8CaptouchDisplayMessage[] = "\n\rDisplay Captouch values ";
+  u8 au8CaptouchOnMessage[] = "No values displayed if Captouch is OFF\n\r";
+  
+  /* Print message and toggle the flag */
+  DebugPrintf(au8CaptouchDisplayMessage);
+  if(G_u32DebugFlags & _DEBUG_CAPTOUCH_VALUES_ENABLE)
+  {
+    G_u32DebugFlags &= ~_DEBUG_CAPTOUCH_VALUES_ENABLE;
+    DebugPrintf(G_au8UtilMessageOFF);
+  }
+  else
+  {
+    G_u32DebugFlags |= _DEBUG_CAPTOUCH_VALUES_ENABLE;
+    DebugPrintf(G_au8UtilMessageON);
+    DebugPrintf(au8CaptouchOnMessage);
+  }
+  
+} /* end DebugCommandCaptouchValuesToggle() */
+#endif /* EIE_DOTMATRIX only tests */
 
 
 /***********************************************************************************************************************

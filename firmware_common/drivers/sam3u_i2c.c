@@ -27,7 +27,7 @@ TYPES
 
 PUBLIC FUNCTIONS
 - bool TwiReadData(u8 u8SlaveAddress_, u8* pu8RxBuffer_, u32 u32Size_)
-- u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* u8Data_, TwiStopType Send_)
+- u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType Send_)
 
 PROTECTED FUNCTIONS
 - void SspInitialize(void)
@@ -151,7 +151,7 @@ bool TwiReadData(u8 u8SlaveAddress_, u8* pu8RxBuffer_, u32 u32Size_)
 
 
 /*!--------------------------------------------------------------------------------------------------------------------
-@fn u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* u8Data_, TwiStopType eSend_)
+@fn u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType eStop_)
 
 @brief Queues a data array for transfer on the TWI0 peripheral.  
 
@@ -160,8 +160,9 @@ Requires:
   be destroyed during this function.
 
 @param u8SlaveAddress_ holds the target's I²C address
-@param u8Byte_ is the byte to send
-@param eSend_ is the type of operation
+@param u32Size_ is the number of bytes to send
+@param pu8Data_ points to the start of the data
+@param eStop_ is the type of operation
 
 Promises:
 - adds the data message at TWI_Peripheral0.pTransmitBuffer buffer that will be sent by the TWI application
@@ -170,7 +171,7 @@ Promises:
   G_u32MessagingFlags can be checked for the reason
 
 */
-u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* u8Data_, TwiStopType eStop_)
+u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* pu8Data_, TwiStopType eStop_)
 {
   u32 u32Token;
     
@@ -181,7 +182,7 @@ u32 TwiWriteData(u8 u8SlaveAddress_, u32 u32Size_, u8* u8Data_, TwiStopType eSto
   }
 
   /* Queue Message in message system */
-  u32Token = QueueMessage(&TWI_Peripheral0.pTransmitBuffer, u32Size_, u8Data_);
+  u32Token = QueueMessage(&TWI_Peripheral0.pTransmitBuffer, u32Size_, pu8Data_);
   if(u32Token == 0)
   {
     /* TWI Message Task Queue Full or the Tx transmit isn't complete */
@@ -344,6 +345,7 @@ void TwiManualMode(void)
   
   while(TWI_u32Flags &_TWI_INIT_MODE)
   {
+    WATCHDOG_BONE();
     TWI_pfnStateMachine();
     MessagingRunActiveState();
     DebugRunActiveState();

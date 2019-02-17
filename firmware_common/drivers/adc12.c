@@ -150,8 +150,9 @@ bConversionStarted = Adc12StartConversion(ADC12_CH2);
 
 
 Requires:
+- Adc12_bAdcAvailable indicates if the ADC is available for a conversion
+
 @param eAdcChannel_ the ADC12 channel to disable
-@param Adc12_bAdcAvailable indicates if the ADC is available for a conversion
 
 Promises:
 
@@ -205,8 +206,7 @@ Requires:
 Promises:
 - The ADC-12 peripheral is configured
 - ADC interrupt is enabled
-
-@param Adc12_pfnStateMachine set to Idle
+- Adc12_pfnStateMachine set to Idle
 
 */
 void Adc12Initialize(void)
@@ -324,7 +324,7 @@ void ADCC0_IrqHandler(void)
 /*----------------------------------------------------------------------------------------------------------------------*/
 
 /*!----------------------------------------------------------------------------------------------------------------------
-@fn Adc12DefaultCallback()
+@fn void Adc12DefaultCallback(u16 u16Result_)
 
 @brief An empty function that the unset Adc Callbacks point to.  
 

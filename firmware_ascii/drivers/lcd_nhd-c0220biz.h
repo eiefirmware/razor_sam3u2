@@ -111,7 +111,7 @@ space can be used for scrolling displays.
 /*-------------------------------------------------------------------------------------------------------------------*/
 void LcdCommand(u8 u8Command_);
 void LcdClearChars(u8 u8Address_, u8 u8CharactersToClear_);
-void LcdMessage(u8 u8Address_, u8 *u8Message_);
+void LcdMessage(u8 u8Address_, u8* pu8Message_);
 
 
 /*-------------------------------------------------------------------------------------------------------------------*/

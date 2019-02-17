@@ -456,6 +456,7 @@ static void UartManualMode(void)
   
   while(Uart_u32Flags &_UART_MANUAL_MODE)
   {
+    WATCHDOG_BONE();
     UartRunActiveState();
     MessagingRunActiveState();
 

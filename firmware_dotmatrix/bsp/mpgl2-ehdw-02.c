@@ -1,6 +1,6 @@
 /*!**********************************************************************************************************************
-@file eief1-pcb-01.c                                                                
-@brief This file provides core and GPIO functions for the eief1-pcb-01 board.
+@file mpgl2-ehdw-02.c                                                                
+@brief This file provides core and GPIO functions for the mpgl2-ehdw-02 Dot Matrix LCD board.
 
 Basic board setup functions are here which are not part of the API for the system since they
 are one-time configurations for the processor.  
@@ -25,24 +25,20 @@ PROTECTED FUNCTIONS
 
 #include "configuration.h"
 
-/***********************************************************************************************************************
-Global variable definitions with scope across entire project.
-All Global variable names shall start with "G_xxBsp"
-***********************************************************************************************************************/
-/* New variables */
-
 /*! LED locations: order must correspond to the order set in LedNameType in the header file. */
-const PinConfigurationType G_asBspLedConfigurations[U8_TOTAL_LEDS] = { {PB_13_LED_WHT, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_14_LED_PRP, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_18_LED_BLU, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_16_LED_CYN, PORTB, ACTIVE_HIGH},
-                                                                       {PB_19_LED_GRN, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_17_LED_YLW, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_15_LED_ORG, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_20_LED_RED, PORTB, ACTIVE_HIGH},
-                                                                       {PB_10_LCD_BL_RED, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_11_LCD_BL_GRN, PORTB, ACTIVE_HIGH}, 
-                                                                       {PB_12_LCD_BL_BLU, PORTB, ACTIVE_HIGH} 
+const PinConfigurationType G_asBspLedConfigurations[U8_TOTAL_LEDS] = { {PB_20_LED0_RED, PORTB, ACTIVE_HIGH}, 
+                                                                       {PB_17_LED1_RED, PORTB, ACTIVE_HIGH}, 
+                                                                       {PB_19_LED2_RED, PORTB, ACTIVE_HIGH}, 
+                                                                       {PB_18_LED3_RED, PORTB, ACTIVE_HIGH},
+                                                                       {PA_29_LED0_GRN, PORTA, ACTIVE_HIGH}, 
+                                                                       {PB_02_LED1_GRN, PORTB, ACTIVE_HIGH}, 
+                                                                       {PA_26_LED2_GRN, PORTA, ACTIVE_HIGH}, 
+                                                                       {PA_07_LED3_GRN, PORTA, ACTIVE_HIGH},
+                                                                       {PB_01_LED0_BLU, PORTB, ACTIVE_HIGH}, 
+                                                                       {PB_13_LED1_BLU, PORTB, ACTIVE_HIGH}, 
+                                                                       {PA_06_LED2_BLU, PORTA, ACTIVE_HIGH}, 
+                                                                       {PA_08_LED3_BLU, PORTA, ACTIVE_HIGH}, 
+                                                                       {PB_05_LCD_BL,   PORTB, ACTIVE_HIGH} 
                                                                       };
 
 
@@ -51,8 +47,6 @@ const PinConfigurationType G_asBspLedConfigurations[U8_TOTAL_LEDS] = { {PB_13_LE
 /*! Button locations: order must correspond to the order set in ButtonNameType in the header file. */
 const PinConfigurationType G_asBspButtonConfigurations[U8_TOTAL_BUTTONS] = { {PA_17_BUTTON0, PORTA, ACTIVE_LOW}, 
                                                                              {PB_00_BUTTON1, PORTB, ACTIVE_LOW}, 
-                                                                             {PB_01_BUTTON2, PORTB, ACTIVE_LOW}, 
-                                                                             {PB_02_BUTTON3, PORTB, ACTIVE_LOW},
                                                                            };
 
 
@@ -70,13 +64,12 @@ extern volatile u32 G_u32DebugFlags;           /*!< @brief From debug.c */
 Global variable definitions with scope limited to this local application.
 Variable names shall start with "Bsp_" and be declared as static.
 ***********************************************************************************************************************/
-static u32 Bsp_u32TimingViolationsCounter = 0;        
+static u32 Bsp_u32TimingViolationsCounter = 0;
 
 
 /***********************************************************************************************************************
 Function Definitions
 ***********************************************************************************************************************/
-
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /*! @protectedsection */                                                                                            
@@ -251,7 +244,7 @@ Requires:
 - Should be called only once in the main system loop
 
 Promises:
-@Bsp_u32TimingViolationsCounter is incremented if G_u32SystemTime1ms has
+- Bsp_u32TimingViolationsCounter is incremented if G_u32SystemTime1ms has
 increased by more than one since this function was last called
 
 */
@@ -340,13 +333,6 @@ void PWMSetupAudio(void)
   AT91C_BASE_PWMC_CH0->PWMC_CPRDUPDR = PWM_CPRD0_INIT; /* Latch CPRD values */
   AT91C_BASE_PWMC_CH0->PWMC_CDTYR    = PWM_CDTY0_INIT; /* Set 50% duty */
   AT91C_BASE_PWMC_CH0->PWMC_CDTYUPDR = PWM_CDTY0_INIT; /* Latch CDTY values */
-
-  AT91C_BASE_PWMC_CH1->PWMC_CMR = PWM_CMR1_INIT;
-  AT91C_BASE_PWMC_CH1->PWMC_CPRDR    = PWM_CPRD1_INIT; /* Set current frequency  */
-  AT91C_BASE_PWMC_CH1->PWMC_CPRDUPDR = PWM_CPRD1_INIT; /* Latch CPRD values */
-  AT91C_BASE_PWMC_CH1->PWMC_CDTYR    = PWM_CDTY1_INIT; /* Set 50% duty */
-  AT91C_BASE_PWMC_CH1->PWMC_CDTYUPDR = PWM_CDTY1_INIT; /* Latch CDTY values */
-
   
 } /* end PWMSetupAudio() */
 
@@ -396,12 +382,6 @@ void PWMAudioSetFrequency(BuzzerChannelType eChannel_, u16 u16Frequency_)
       break;
     }
 
-    case BUZZER2:
-    {
-      psChannelAddress = AT91C_BASE_PWMC_CH1;
-      break;
-    }
-
     default:
     {
       /* Invalid channel */
@@ -437,7 +417,7 @@ void PWMAudioSetFrequency(BuzzerChannelType eChannel_, u16 u16Frequency_)
 
 Example:
 
-PWMAudioOn(BUZZER2);
+PWMAudioOn(BUZZER1);
 
 Requires:
 - All peripheral values should be configured
@@ -464,11 +444,11 @@ void PWMAudioOn(BuzzerChannelType eBuzzerChannel_)
 
 Example:
 
-PWMAudioOff(BUZZER2);
+PWMAudioOff(BUZZER1);
 
 
 Requires:
-@param eBuzzerChannel_ is a valid BuzzerChannelType (BUZZER1 or BUZZER2)
+@param eBuzzerChannel_ is a valid BuzzerChannelType
 
 Promises:
 - PWM for the selected channel is disabled
@@ -490,3 +470,4 @@ void PWMAudioOff(BuzzerChannelType eBuzzerChannel_)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File */
 /*--------------------------------------------------------------------------------------------------------------------*/
+

@@ -250,7 +250,7 @@ u32 SpiWriteByte(SpiPeripheralType* psSpiPeripheral_, u8 u8Byte_)
 Requires:
 @param psSpiPeripheral_ is the SPI peripheral to use and it has already been requested.
 @param u32Size_ is the number of bytes in the data array
-@param u8Data_ points to the first byte of the data array
+@param pu8Data_ points to the first byte of the data array
 
 Promises:
 - adds the data message at psSpiPeripheral_->psTransmitBuffer that will be sent by the SPI application
@@ -334,7 +334,7 @@ Requires:
 - Master mode 
 
 @param psSpiPeripheral_ is the SPI peripheral to use and it has already been requested.
-@param u32Size_ is the number of bytes to receive
+@param u16Size_ is the number of bytes to receive
 
 Promises:
 - Returns FALSE if the message is too big, or the peripheral already has a read request
@@ -508,6 +508,7 @@ void SpiManualMode(void)
   /* Run the SPI state machine so all SPI peripherals send their current message */  
   while(SPI_u32Flags & _SPI_MANUAL_MODE)
   {
+    WATCHDOG_BONE();
     Spi_pfnStateMachine();
     MessagingRunActiveState();
     

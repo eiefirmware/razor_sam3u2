@@ -170,7 +170,7 @@ This is a non-latching function.
 
 Requires:
 @param eButton_ is a valid button index
-@param u32ButtonHeldTime is a time in ms 
+@param u32ButtonHeldTime_ is a time in ms 
  
 Promises:
 - Returns TRUE if eButton_ has been held longer than u32ButtonHeldTime_

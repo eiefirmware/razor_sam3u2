@@ -172,7 +172,7 @@
         </option>
         <option>
           <name>CCDefines</name>
-          <state>EIE_ASCII</state>
+          <state>EIE_DOTMATRIX</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -305,6 +305,7 @@
           <state>$PROJ_DIR$\..\bsp</state>
           <state>$PROJ_DIR$\..\drivers</state>
           <state>$PROJ_DIR$\..\application</state>
+          <state>$PROJ_DIR$\..\libraries\captouch</state>
           <state>$PROJ_DIR$\..\..\firmware_common</state>
           <state>$PROJ_DIR$\..\..\firmware_common\application</state>
           <state>$PROJ_DIR$\..\..\firmware_common\bsp</state>
@@ -571,6 +572,7 @@
           <state>$PROJ_DIR$\..\bsp</state>
           <state>$PROJ_DIR$\..\drivers</state>
           <state>$PROJ_DIR$\..\application</state>
+          <state>$PROJ_DIR$\..\libraries\captouch</state>
           <state>$PROJ_DIR$\..\..\firmware_common</state>
           <state>$PROJ_DIR$\..\..\firmware_common\application</state>
           <state>$PROJ_DIR$\..\..\firmware_common\cmsis</state>
@@ -604,11 +606,11 @@
         </option>
         <option>
           <name>OCOutputOverride</name>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>eiefw-01.hex</state>
+          <state>eie_dotmatrix_01.hex</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -662,7 +664,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>eie_ascii-01.out</state>
+          <state>eie_dotmatrix.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -726,7 +728,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\..\..\firmware_common\bsp\sam3u2-flash.icf</state>
+          <state>D:\EiE\EiE Git\razor_sam3u2\firmware_common\bsp\sam3u2-flash.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -1910,7 +1912,7 @@
         <name>$PROJ_DIR$\..\..\firmware_common\bsp\configuration.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\bsp\eief1-pcb-01.h</name>
+        <name>$PROJ_DIR$\..\bsp\mpgl2-ehdw-02.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\bsp\sam3u2-flash.icf</name>
@@ -1925,10 +1927,10 @@
         <name>$PROJ_DIR$\..\..\firmware_common\bsp\board_cstartup_iar.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\bsp\eief1-pcb-01.c</name>
+        <name>$PROJ_DIR$\..\..\firmware_common\bsp\kill_x_cycles.s</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\firmware_common\bsp\kill_x_cycles.s</name>
+        <name>$PROJ_DIR$\..\bsp\mpgl2-ehdw-02.c</name>
       </file>
     </group>
   </group>
@@ -1961,13 +1963,19 @@
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\drivers\captouch.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\drivers\lcd_nhd-c0220biz.h</name>
+        <name>$PROJ_DIR$\..\drivers\lcd_bitmaps.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\leds.h</name>
@@ -2009,13 +2017,19 @@
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.c</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\drivers\captouch.c</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\drivers\lcd_nhd-c0220biz.c</name>
+        <name>$PROJ_DIR$\..\drivers\lcd_bitmaps.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\leds.c</name>
@@ -2040,6 +2054,27 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\drivers\utilities.c</name>
+      </file>
+    </group>
+  </group>
+  <group>
+    <name>_Libraries</name>
+    <group>
+      <name>bin</name>
+      <file>
+        <name>$PROJ_DIR$\..\libraries\captouch\bin\libsam3u-32qt-k-8rs-iar.a</name>
+      </file>
+    </group>
+    <group>
+      <name>Include</name>
+      <file>
+        <name>$PROJ_DIR$\..\libraries\captouch\libqtouch.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\libraries\captouch\include\touch_api.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\libraries\captouch\include\touch_qt_config.h</name>
       </file>
     </group>
   </group>
