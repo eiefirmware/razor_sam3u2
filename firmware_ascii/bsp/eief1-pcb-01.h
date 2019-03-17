@@ -34,7 +34,7 @@ Type Definitions
 @brief Logical names for LEDs in the system.
 
 The order of the LEDs in LedNameType must match the order of the definition 
-in G_asBspLedConfigurations Led_au32BitPositions from eief1-pcb-01.c 
+in G_asBspLedConfigurations from eief1-pcb-01.c 
 */
 typedef enum {WHITE = 0, PURPLE, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, LCD_RED, LCD_GREEN, LCD_BLUE} LedNameType;
 
@@ -235,6 +235,15 @@ void PWMSetupAudio(void);
 #define PB_02_BUTTON3           (u32)0x00000004
 #define PB_01_BUTTON2           (u32)0x00000002
 #define PB_00_BUTTON1           (u32)0x00000001
+
+
+/* Blade pin redefinitions for BladeApi*/
+
+#define BLADE_PIN_AN1           PB_04_BLADE_AN1         
+#define BLADE_PIN_AN0           PB_03_BLADE_AN0 
+
+
+#define BLADE_PIN_AN0_PORT
 
 
 /*! @cond DOXYGEN_EXCLUDE */

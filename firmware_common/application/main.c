@@ -87,6 +87,9 @@ void main(void)
 #ifdef EIE_DOTMATRIX
   CapTouchInitialize();
 #endif /* EIE_DOTMATRIX */
+  
+  /* Blade initialization */
+  BladeApiInitialize();
  
   /* Application initialization */
   UserApp1Initialize();
@@ -126,6 +129,9 @@ void main(void)
 #ifdef EIE_DOTMATRIX
     CapTouchRunActiveState();
 #endif /* EIE_DOTMATRIX */
+    
+    /* Blade tasks */
+    BladeApiRunActiveState();
 
     /* Applications */
     UserApp1RunActiveState();

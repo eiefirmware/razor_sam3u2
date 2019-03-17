@@ -55,7 +55,7 @@ Includes
 #include "typedefs.h"
 #include "utilities.h"
 
-/* EIEF1-PCB-01 specific header files */
+/* EIEF1_ASCII specific header files */
 #ifdef EIE_ASCII
 #include "eief1-pcb-01.h"
 #include "lcd_nhd-c0220biz.h"
@@ -89,6 +89,9 @@ Includes
 #include "sam3u_ssp.h"
 #include "sam3u_uart.h"
 #include "adc12.h"
+
+/* Common Blade header files */
+#include "blade_api.h"
 
 /* Common application header files */
 #include "debug.h"
