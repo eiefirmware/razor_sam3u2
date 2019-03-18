@@ -350,6 +350,24 @@
   <group>
     <name>Application</name>
     <group>
+      <name>Blades</name>
+      <group>
+        <name>Include</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.h</name>
+        </file>
+      </group>
+      <group>
+        <name>Source</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.c</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\application\blade.readme</name>
+      </file>
+    </group>
+    <group>
       <name>Include</name>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\application\debug.h</name>

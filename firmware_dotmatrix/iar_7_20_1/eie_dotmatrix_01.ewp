@@ -308,6 +308,7 @@
           <state>$PROJ_DIR$\..\libraries\captouch</state>
           <state>$PROJ_DIR$\..\..\firmware_common</state>
           <state>$PROJ_DIR$\..\..\firmware_common\application</state>
+          <state>$PROJ_DIR$\..\..\firmware_common\application\blade</state>
           <state>$PROJ_DIR$\..\..\firmware_common\bsp</state>
           <state>$PROJ_DIR$\..\..\firmware_common\cmsis</state>
           <state>$PROJ_DIR$\..\..\firmware_common\drivers</state>
@@ -728,7 +729,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>D:\EiE\EiE Git\razor_sam3u2\firmware_common\bsp\sam3u2-flash.icf</state>
+          <state>$PROJ_DIR$\..\..\firmware_common\bsp\sam3u2-flash.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -2080,6 +2081,24 @@
   </group>
   <group>
     <name>Application</name>
+    <group>
+      <name>Blades</name>
+      <group>
+        <name>Include</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.h</name>
+        </file>
+      </group>
+      <group>
+        <name>Source</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.c</name>
+        </file>
+      </group>
+      <file>
+        <name>$PROJ_DIR$\..\..\firmware_common\application\blade.readme</name>
+      </file>
+    </group>
     <group>
       <name>Include</name>
       <file>
