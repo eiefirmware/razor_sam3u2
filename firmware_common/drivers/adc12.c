@@ -211,8 +211,6 @@ Promises:
 */
 void Adc12Initialize(void)
 {
-  u8 au8Adc12Started[] = "ADC12 task initialized\n\r";
-
   /* Initialize peripheral registers. ADC starts totally disabled. */
   AT91C_BASE_ADC12B->ADC12B_MR   = ADC12B_MR_INIT;
   AT91C_BASE_ADC12B->ADC12B_CHDR = ADC12B_CHDR_INIT;
@@ -237,7 +235,7 @@ void Adc12Initialize(void)
     NVIC_EnableIRQ(IRQn_ADCC0);
     
     /* Write message, set "good" flag and select Idle state */
-    DebugPrintf(au8Adc12Started);
+    DebugPrintf("ADC12 task initialized\n\r");
     G_u32ApplicationFlags |= _APPLICATION_FLAGS_ADC;
     Adc12_pfnStateMachine = Adc12SM_Idle;
   }

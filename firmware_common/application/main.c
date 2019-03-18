@@ -20,12 +20,12 @@ volatile u32 G_u32ApplicationFlags = 0;  /*!< @brief Global system application f
 /* Task short names corresponding to G_u32ApplicationFlags in main.h */
 #ifdef EIE_ASCII
 const u8 G_aau8AppShortNames[NUMBER_APPLICATIONS][MAX_TASK_NAME_SIZE] = 
-{"LED", "BUTTON", "DEBUG", "TIMER", "LCD", "ADC", "ANT"};
-#endif /* EIE 1 */
+{"LED", "BUTTON", "DEBUG", "TIMER", "LCD", "ADC", "ANT", "BLADE"};
+#endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX
 const u8 G_aau8AppShortNames[NUMBER_APPLICATIONS][MAX_TASK_NAME_SIZE] = 
-{"LED", "BUTTON", "DEBUG", "TIMER", "LCD", "ADC", "ANT", "CAPTOUCH"};
+{"LED", "BUTTON", "DEBUG", "TIMER", "LCD", "ADC", "ANT", "BLADE", "CAPTOUCH"};
 #endif /* EIE_DOTMATRIX */
 
 

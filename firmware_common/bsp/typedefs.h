@@ -69,6 +69,12 @@ typedef enum {FALSE = 0, TRUE = !FALSE} bool;  /*!< @brief EiE standard variable
 typedef enum {PORTA = 0, PORTB = 0x80} PortOffsetType;               
 
 /*! 
+@enum PinPeripheralType
+@brief Processor-specific peripheral selection address offsets.
+*/
+typedef enum {PERIPHERAL_A = 0, PERIPHERAL_B = 1} PinPeripheralType;               
+
+/*! 
 @enum GpioActiveType
 @brief Real names for active low vs. active high GPIO.
 */

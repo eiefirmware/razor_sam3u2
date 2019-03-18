@@ -10,13 +10,13 @@
 Firmware Version - Printed FIRMWARE_MAIN_REV.FIRMWARE_SUB_REV1 FIRMWARE_SUB_REV2
 
 FIRMWARE_MAIN_REV: should be updated only with RELEASES to Github.
-FIRMWARE_SUB_REV1: should be updated when a pull request is made to the MASTER branch.
+FIRMWARE_SUB_REV:  should be updated for significant functionality changes.
 ***********************************************************************************************************************/
 #define FIRMWARE_VERSION     {'F','i','r','m','w','a','r','e',' ','v','e','r','s','i','o','n',':',' ', \
                              FIRMWARE_MAIN_REV, '.', FIRMWARE_SUB_REV1, FIRMWARE_SUB_REV2,'\n','\n','\r','\0'}
 
 #define FIRMWARE_MAIN_REV    '1'               
-#define FIRMWARE_SUB_REV1    '0'
+#define FIRMWARE_SUB_REV1    '1'
 #define FIRMWARE_SUB_REV2    '0'
 
 
@@ -33,20 +33,21 @@ FIRMWARE_SUB_REV1: should be updated when a pull request is made to the MASTER b
 #define _APPLICATION_FLAGS_LCD          0x00000010        /*!< @brief G_u32ApplicationFlags LcdStateMachine is initialized */
 #define _APPLICATION_FLAGS_ADC          0x00000020        /*!< @brief G_u32ApplicationFlags Adc12StateMachine is initialized */
 #define _APPLICATION_FLAGS_ANT          0x00000040        /*!< @brief G_u32ApplicationFlags AntStateMachine is initialized */
-//#define _APPLICATION_FLAGS_USBCDC       0x00000080        /*!< @brief G_u32ApplicationFlags USBCDC StateMachine */
+#define _APPLICATION_FLAGS_BLADE        0x00000080        /*!< @brief G_u32ApplicationFlags BladeStateMachine is initialized */
+//#define _APPLICATION_FLAGS_USBCDC       0x00000100        /*!< @brief G_u32ApplicationFlags USBCDC StateMachine */
 
 #ifdef EIE_ASCII
 //#define _APPLICATION_FLAGS_SDCARD       0x00000100        /*!< @brief G_u32ApplicationFlags SdCardStateMachine */
 /* end G_u32ApplicationFlags */
 
-#define NUMBER_APPLICATIONS             (u8)7             /*!< @brief Total number of system applications */
-#endif /* EIE 1 */
+#define NUMBER_APPLICATIONS             (u8)8             /*!< @brief Total number of system applications */
+#endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX
-#define _APPLICATION_FLAGS_CAPTOUCH     0x00000080        /*!< @brief G_u32ApplicationFlags SdCardStateMachine */
+#define _APPLICATION_FLAGS_CAPTOUCH     0x00000100        /*!< @brief G_u32ApplicationFlags SdCardStateMachine */
 /* end G_u32ApplicationFlags */
 
-#define NUMBER_APPLICATIONS             (u8)8             /*!< @brief Total number of system applications */
+#define NUMBER_APPLICATIONS             (u8)9             /*!< @brief Total number of system applications */
 #endif /* EIE_DOTMATRIX */
 
 #define MAX_TASK_NAME_SIZE              (u8)10            /*!< @brief Maximum string size for task name reported in SystemStatusReport */

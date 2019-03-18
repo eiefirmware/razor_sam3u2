@@ -2473,6 +2473,9 @@
                     <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.c</name>
                 </file>
             </group>
+            <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\blade.readme</name>
+            </file>
         </group>
         <group>
             <name>Include</name>
