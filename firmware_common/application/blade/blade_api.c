@@ -83,7 +83,7 @@ Function Definitions
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 /*!--------------------------------------------------------------------------------------------------------------------
-@fn bool BladeRequestPin(BladePinType ePin_, BladePinIOType ePinFunction_)
+@fn ErrorStatusType BladeRequestPin(BladePinType ePin_, BladePinIOType ePinFunction_)
 
 @brief Requests a pin to be used by a Blade task.
 
@@ -113,12 +113,12 @@ Requires:
 @param ePinFunction_ specifies the desired configuration
 
 Promises:
-- Returns TRUE if pin is available; BladeApi_au8PinAllocated[ePin_] is
+- Returns SUCCESS if pin is available; BladeApi_au8PinAllocated[ePin_] is
   set to the type of allocation and the pin is configured according to ePinFunction_
-- Returns FALSE if pin has already been allocated
+- Returns ERROR if pin has already been allocated
 
 */
-bool BladeRequestPin(BladePinType ePin_, BladePinIOType ePinFunction_)
+ErrorStatusType BladeRequestPin(BladePinType ePin_, BladePinIOType ePinFunction_)
 {
   /* Check special case of I2C PERIPHERAL pins */
   if( (BladeApi_au32BladePins[ePin_] == BLADE_PIN_SDA) ||
@@ -129,7 +129,7 @@ bool BladeRequestPin(BladePinType ePin_, BladePinIOType ePinFunction_)
       /* I2C pins already configured for PERIPHERAL do not need to be reconfigured; 
       user is alerted to the shared config and assigment is considered successful. */
       DebugPrintf("Blade I2C pin assigned as shared\n\r");
-      return TRUE;
+      return SUCCESS;
     }
   }
   
@@ -140,7 +140,7 @@ bool BladeRequestPin(BladePinType ePin_, BladePinIOType ePinFunction_)
     DebugPrintNumber((u32)ePin_);
     DebugPrintf(" already allocated\n\r");
     
-    return FALSE;
+    return ERROR;
   }
   
   /* Pin is available, so claim it and configure */
@@ -182,7 +182,7 @@ bool BladeRequestPin(BladePinType ePin_, BladePinIOType ePinFunction_)
 
   DebugPrintNumber((u32)ePin_);
   DebugPrintf(" pin Blade assigned\n\r");
-  return TRUE;
+  return SUCCESS;
   
 } /* end BladeRequestPin() */
 

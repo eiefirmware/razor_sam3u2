@@ -90,7 +90,8 @@ void main(void)
   
   /* Blade initialization */
   BladeApiInitialize();
- 
+  BladeLsm9ds1Initialize();
+  
   /* Application initialization */
   UserApp1Initialize();
   UserApp2Initialize();
@@ -132,7 +133,8 @@ void main(void)
     
     /* Blade tasks */
     BladeApiRunActiveState();
-
+    BladeLsm9ds1RunActiveState();
+   
     /* Applications */
     UserApp1RunActiveState();
     UserApp2RunActiveState();

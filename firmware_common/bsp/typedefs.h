@@ -92,10 +92,10 @@ typedef struct
 }PinConfigurationType;
 
 /*! 
-@struct ErrorStatus
+@enum ErrorStatus
 @brief Standarized, self-documenting error codes.
 */
-typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrorStatus;
+typedef enum {SUCCESS = 0, ERROR = 1} ErrorStatusType;
 
 
 #endif /* __TYPEDEFS_H */

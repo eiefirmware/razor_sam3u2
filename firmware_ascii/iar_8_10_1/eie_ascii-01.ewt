@@ -2466,11 +2466,17 @@
                 <file>
                     <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.h</name>
                 </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_imu_lsm9ds1.h</name>
+                </file>
             </group>
             <group>
                 <name>Source</name>
                 <file>
                     <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_api.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\firmware_common\application\blade\blade_imu_lsm9ds1.c</name>
                 </file>
             </group>
             <file>
