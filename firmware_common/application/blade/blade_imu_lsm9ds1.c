@@ -50,6 +50,7 @@ PROTECTED FUNCTIONS
 
 #include "configuration.h"
 
+
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
 All Global variable names shall start with "G_<type>BladeLsm9ds1"
@@ -112,9 +113,9 @@ void BladeLsm9ds1Initialize(void)
   bool bGyro = FALSE;
   
   /* Blade resource requests: I2C SCL, SDA, and IO1 interrupt line */
-  eErrorStatus += BladeRequestPin(BLADE_PIN_0, DIGITAL_IN);
-  eErrorStatus += BladeRequestPin(BLADE_PIN_8, PERIPHERAL);
-  eErrorStatus += BladeRequestPin(BLADE_PIN_9, PERIPHERAL);
+  eErrorStatus += BladeRequestPin(BLADE_PIN0, DIGITAL_IN);
+  eErrorStatus += BladeRequestPin(BLADE_PIN8, PERIPHERAL);
+  eErrorStatus += BladeRequestPin(BLADE_PIN9, PERIPHERAL);
   if(eErrorStatus)
   {
     DebugPrintf("LSM9DS1 Blade pin resources not available\n\r"); 

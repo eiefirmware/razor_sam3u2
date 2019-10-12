@@ -88,7 +88,7 @@ Function Definitions
 @brief Requests a pin to be used by a Blade task.
 
 Only main pin functionality is controlled here (GPIO input or output,
-or peripheral A or B). Hardware filters, pull resistors, or other special 
+or peripheral function). Hardware filters, pull resistors, or other special 
 features can be enabled by the application if required.
 
 Since Blade connections are standard, it is assumed the user understands
@@ -209,7 +209,7 @@ Promises:
 */
 void BladeApiInitialize(void)
 {
-  /* Deallocate all pins */
+  /* Deallocate all blade pins */
   for(u8 i = 0; i < U8_BLADE_PINS; i++)
   {
     BladeApi_auePinAllocated[i] = PIN_NOT_ASSIGNED;

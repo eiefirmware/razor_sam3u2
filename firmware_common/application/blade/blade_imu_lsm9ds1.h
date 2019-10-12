@@ -1,25 +1,11 @@
 /*!*********************************************************************************************************************
-@file blade_template.h                                                                
-@brief Header file for blade_template
-
-----------------------------------------------------------------------------------------------------------------------
-To start a new Blade task using this blade_template:
-1. Follow the instructions at the top of blade_template.c
-2. Use ctrl-h to find and replace all instances of "blade_template" with "blade_taskname"
-3. Use ctrl-h to find and replace all instances of "BladeTemplate" with "BladeTaskName"
-4. Use ctrl-h to find and replace all instances of "BLADE_TEMPLATE" with "BLADE_NEW_TASK_NAME"
-5. Add #include blade_taskname.h" to configuration.h
-6. Add/update any special configurations required in configuration.h (e.g. peripheral assignment and setup values)
-7. Delete this text (between the dashed lines)
-
-Note: prior to pushing the completed Blade application to the Master Branch, the
-Initialization and Main loop function calls should be removed from main.  
-----------------------------------------------------------------------------------------------------------------------
+@file blade_imu_lsm9ds1.h                                                                
+@brief Header file for Blade IMU using LSM9DS1.
 
 **********************************************************************************************************************/
 
-#ifndef __BLADE_TEMPLATE_H
-#define __BLADE_TEMPLATE_H
+#ifndef __BLADE_LSM9DS1_H
+#define __BLADE_LSM9DS1_H
 
 /**********************************************************************************************************************
 Type Definitions
@@ -38,8 +24,8 @@ Function Declarations
 /*------------------------------------------------------------------------------------------------------------------*/
 /*! @protectedsection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/
-void BladeTemplateInitialize(void);
-void BladeTemplateRunActiveState(void);
+void BladeLsm9ds1Initialize(void);
+void BladeLsm9ds1RunActiveState(void);
 
 
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -50,8 +36,8 @@ void BladeTemplateRunActiveState(void);
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/
-static void BladeTemplateSM_Idle(void);    
-static void BladeTemplateSM_Error(void);         
+static void BladeLsm9ds1SM_Idle(void);    
+static void BladeLsm9ds1SM_Error(void);         
 
 
 
@@ -60,7 +46,7 @@ Constants / Definitions
 **********************************************************************************************************************/
 
 
-#endif /* __BLADE_TEMPLATE_H */
+#endif /* __BLADE_LSM9DS1_H */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* End of File                                                                                                        */
