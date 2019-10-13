@@ -92,6 +92,44 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+//#define PART1
+  
+#ifdef PART // Part 1 of the online exercise
+  /* Initialize all unused LEDs to off */
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  
+  /* Turn on desired LEDs using the ON function */
+  LedOn(BLUE);
+  LedOn(PURPLE);
+
+  /* Set an LED to blink at 2Hz */
+  LedBlink(RED, LED_2HZ);
+
+  /* Set an LED to the dimmest state we have (5% duty cycle) */
+  LedPWM(WHITE, LED_PWM_5);
+#endif // PART1
+  
+#ifndef PART1
+  /* All discrete LEDs to off */
+  LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED);
+  
+  /* Backlight to white */  
+  LedOn(LCD_RED);
+  LedOn(LCD_GREEN);
+  LedOn(LCD_BLUE);
+
+#endif // !PART
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -137,9 +175,136 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* What does this state do? */
+/* 
+Part 1: Manually blink an LED at a hard-coded rate.
+Part 2: Implement a 4-bit counter on the green, yellow, orange and red LEDs 
+Part 3: Change the backlight color every time the counter rolls. 
+*/ 
 static void UserApp1SM_Idle(void)
 {
+  static u16 u16BlinkCount = 0;
+  static u8 u8BinaryCounter = 0;
+  static u8 u8ColorIndex = 0;
+  
+  u16BlinkCount++;
+  if(u16BlinkCount == 500)
+  {
+    u16BlinkCount = 0;
+
+    /* Part 1 code */
+    LedToggle(PURPLE);
+  
+    /* Part 2 code: update the counter and roll at 16 */
+    u8BinaryCounter++;
+    if(u8BinaryCounter == 16)
+    {
+      u8BinaryCounter = 0;
+      
+      /* Part 3 code: manage the backlight color */
+      u8ColorIndex++;
+      if(u8ColorIndex == 7)
+      {
+        u8ColorIndex = 0;
+      }
+
+      /* Choose the backlight color: white (all), 
+      purple (blue + red), blue, cyan (blue + green), 
+      green, yellow (green + red), red */
+      switch(u8ColorIndex)
+      {
+        case 0: /* white */
+          LedOn(LCD_RED);
+          LedOn(LCD_GREEN);
+          LedOn(LCD_BLUE);
+          break;
+
+        case 1: /* purple */
+          LedOn(LCD_RED);
+          LedOff(LCD_GREEN);
+          LedOn(LCD_BLUE);
+          break;
+          
+        case 2: /* blue */
+          LedOff(LCD_RED);
+          LedOff(LCD_GREEN);
+          LedOn(LCD_BLUE);
+          break;
+          
+        case 3: /* cyan */
+          LedOff(LCD_RED);
+          LedOn(LCD_GREEN);
+          LedOn(LCD_BLUE);
+          break;
+          
+        case 4: /* green */
+          LedOff(LCD_RED);
+          LedOn(LCD_GREEN);
+          LedOff(LCD_BLUE);
+          break;
+          
+        case 5: /* yellow */
+          LedOn(LCD_RED);
+          LedOn(LCD_GREEN);
+          LedOff(LCD_BLUE);
+          break;
+          
+        case 6: /* red */
+          LedOn(LCD_RED);
+          LedOff(LCD_GREEN);
+          LedOff(LCD_BLUE);
+          break;
+          
+        default: /* off */
+          LedOff(LCD_RED);
+          LedOff(LCD_GREEN);
+          LedOff(LCD_BLUE);
+          break;
+      } /* end switch */
+
+    } /* end if(u8BinaryCounter == 16) */
+    
+    /* Parse the current count to set the LEDs.  
+    RED is bit 0, ORANGE is bit 1, 
+    YELLOW is bit 2, GREEN is bit 3. */
+    
+    if(u8BinaryCounter & 0x01)
+    {
+      LedOn(RED);
+    }
+    else
+    {
+      LedOff(RED);
+    }
+
+    if(u8BinaryCounter & 0x02)
+    {
+      LedOn(ORANGE);
+    }
+    else
+    {
+      LedOff(ORANGE);
+    }
+
+    if(u8BinaryCounter & 0x04)
+    {
+      LedOn(YELLOW);
+    }
+    else
+    {
+      LedOff(YELLOW);
+    }
+
+    if(u8BinaryCounter & 0x08)
+    {
+      LedOn(GREEN);
+    }
+    else
+    {
+      LedOff(GREEN);
+    }
+
+  } /* if(u16BlinkCount == 500) */
+
     
 } /* end UserApp1SM_Idle() */
      
