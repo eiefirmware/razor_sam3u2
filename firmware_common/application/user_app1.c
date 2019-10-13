@@ -92,6 +92,15 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED);
+
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -137,10 +146,53 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* What does this state do? */
+/* Demonstrate various button API functions */
 static void UserApp1SM_Idle(void)
 {
-    
+  static bool bYellowBlink = FALSE;
+  
+  if( IsButtonPressed(BUTTON0) )
+  {
+    /* The button is currently pressed, so make sure the LED is on */
+    LedOn(WHITE);
+  }
+  else
+  {
+    /* The button is not pressed, so make sure the LED is off */
+    LedOff(WHITE);
+  }
+
+  
+  if( WasButtonPressed(BUTTON1) )
+  {
+    /* Be sure to acknowledge the button press */
+    ButtonAcknowledge(BUTTON1);
+
+    /* If the LED is already blinking, toggle it off */
+    if(bYellowBlink)
+    {
+      bYellowBlink = FALSE;
+      LedOff(YELLOW);
+    }
+    else
+    {
+     /* start blinking the LED at the current rate */
+      bYellowBlink = TRUE;
+      LedBlink(YELLOW, LED_1HZ);
+    }
+  }
+
+  
+  if( IsButtonHeld(BUTTON3, 2000) )
+  {
+    LedOn(CYAN);
+  }
+  else
+  {
+    LedOff(CYAN);
+  }
+
+
 } /* end UserApp1SM_Idle() */
      
 
