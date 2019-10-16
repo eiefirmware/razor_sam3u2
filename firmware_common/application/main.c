@@ -21,7 +21,7 @@ volatile u32 G_u32ApplicationFlags = 0;  /*!< @brief Global system application f
 #ifdef EIE_ASCII
 const u8 G_aau8AppShortNames[NUMBER_APPLICATIONS][MAX_TASK_NAME_SIZE] = 
 {"LED", "BUTTON", "DEBUG", "TIMER", "LCD", "ADC", "ANT"};
-#endif /* EIE 1 */
+#endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX
 const u8 G_aau8AppShortNames[NUMBER_APPLICATIONS][MAX_TASK_NAME_SIZE] = 
@@ -50,7 +50,6 @@ Promises:
 - NONE
 
 */
-
 void main(void)
 {
   G_u32SystemFlags |= _SYSTEM_INITIALIZING;
@@ -82,7 +81,7 @@ void main(void)
   AntApiInitialize();
   
 #ifdef EIE_ASCII
-#endif /* EIE 1 */
+#endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX
   CapTouchInitialize();
@@ -121,7 +120,7 @@ void main(void)
     AntApiRunActiveState();
 
 #ifdef EIE_ASCII
-#endif /* EIE 1 */
+#endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX
     CapTouchRunActiveState();

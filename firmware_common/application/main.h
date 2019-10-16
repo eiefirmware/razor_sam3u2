@@ -40,7 +40,7 @@ FIRMWARE_SUB_REV1: should be updated when a pull request is made to the MASTER b
 /* end G_u32ApplicationFlags */
 
 #define NUMBER_APPLICATIONS             (u8)7             /*!< @brief Total number of system applications */
-#endif /* EIE 1 */
+#endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX
 #define _APPLICATION_FLAGS_CAPTOUCH     0x00000080        /*!< @brief G_u32ApplicationFlags SdCardStateMachine */
