@@ -2,11 +2,9 @@
 
 "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armjlink2.dll" 
 
-"\\Mac\Home\Documents\GitHub\razor_sam3u2\firmware_ascii\iar_8_10_1\Debug\Exe\eie_ascii-01.out" 
+"C:\Users\Hunter\Documents\GitHub\razor_sam3u2\firmware_ascii\iar_8_10_1\Debug\Exe\eie_ascii-01.out" 
 
 --plugin "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\bin\armbat.dll" 
-
---rtc_enable 
 
 --device_macro "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\arm\config\debugger\Atmel\SAM3U.dmac" 
 
