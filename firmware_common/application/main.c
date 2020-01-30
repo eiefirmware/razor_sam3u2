@@ -81,6 +81,7 @@ void main(void)
   AntApiInitialize();
   
 #ifdef EIE_ASCII
+  BoardTestInitialize();
 #endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX
@@ -120,6 +121,7 @@ void main(void)
     AntApiRunActiveState();
 
 #ifdef EIE_ASCII
+    BoardTestRunActiveState();
 #endif /* EIE_ASCII */
 
 #ifdef EIE_DOTMATRIX

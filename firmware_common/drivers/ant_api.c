@@ -83,7 +83,7 @@ extern volatile u32 G_u32ApplicationFlags;             /*!< @brief From main.c *
 
 extern u32 G_u32AntFlags;                                     /* From ant.c */
 extern AntApplicationMsgListType *G_psAntApplicationMsgList;  /* From ant.c */
-extern AntAssignChannelInfoType G_asAntChannelConfiguration[ANT_NUM_CHANNELS]; /* From ant.c */
+extern AntAssignChannelInfoType G_asAntChannelConfiguration[U8_ANT_NUM_CHANNELS]; /* From ant.c */
 extern AntMessageResponseType G_stAntMessageResponse;         /* From ant.c */
 
 extern u8 G_au8AntMessageOk[];                                /* From ant.c */
@@ -254,7 +254,7 @@ bool AntAssignChannel(AntAssignChannelInfoType* psAntSetupInfo_)
      
   /* Setup the the channel search timeout (currently set at default for infinite search) */
   G_au8AntSetSearchTimeout[2] = psAntSetupInfo_->AntChannel;
-  G_au8AntSetSearchTimeout[3] = ANT_INFINITE_SEARCH_TIMEOUT;
+  G_au8AntSetSearchTimeout[3] = U8_ANT_INFINITE_SEARCH_TIMEOUT;
 
   G_au8AntSetSearchTimeout[4] = AntCalculateTxChecksum(G_au8AntSetSearchTimeout);
   
@@ -830,7 +830,7 @@ static void AntApiSM_AssignChannel(void)
   } /* end if( u8CurrentMesssageId == G_stAntMessageResponse.u8MessageNumber ) */
   
   /* Check for timeout */
-  if(IsTimeUp(&AntApi_u32Timeout, ANT_ACTIVITY_TIME_COUNT) )
+  if(IsTimeUp(&AntApi_u32Timeout, U32_ANT_ACTIVITY_TIME_COUNT) )
   {
     /* Report the error and return.  Channel flags will remain clear for application to check. */
     DebugPrintf(G_au8AntMessageAssign);

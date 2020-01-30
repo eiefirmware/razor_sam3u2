@@ -142,16 +142,16 @@ Macros
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
-#define ANT_NUM_CHANNELS                  (u8)8                  /*!< @brief Maximum number of ANT channels in the system */
-#define ANT_RX_BUFFER_SIZE                (u16)256               /*!< @brief ANT incoming data buffer size */
+#define U8_ANT_NUM_CHANNELS               (u8)8                  /*!< @brief Maximum number of ANT channels in the system */
+#define U16_ANT_RX_BUFFER_SIZE            (u16)256               /*!< @brief ANT incoming data buffer size */
 
-#define ANT_CONFIGURE_TIMEOUT_MS          (u32)2000              /*!< @brief Maximum time to send all channel configuration messages */
-#define ANT_INFINITE_SEARCH_TIMEOUT       (u8)0xFF               /*!< @brief Value for Set Search Timeout for infinite timeout */
+#define U32_ANT_CONFIGURE_TIMEOUT_MS      (u32)2000              /*!< @brief Maximum time to send all channel configuration messages */
+#define U8_ANT_INFINITE_SEARCH_TIMEOUT    (u8)0xFF               /*!< @brief Value for Set Search Timeout for infinite timeout */
 
 /*!@cond DOXYGEN_EXCLUDE */
-#define ANT_RESET_WAIT_MS                 (u32)100
-#define ANT_RESTART_DELAY_MS              (u32)1000
-#define ANT_MSG_TIMEOUT_MS                (u32)1000
+#define U32_ANT_RESET_WAIT_MS             (u32)100
+#define U32_ANT_RESTART_DELAY_MS          (u32)1000
+#define U32_ANT_MSG_TIMEOUT_MS            (u32)1000
 
 /* G_u32AntFlags */
 /* Error / event flags */
@@ -160,8 +160,8 @@ Constants / Definitions
 #define _ANT_FLAGS_UNEXPECTED_EVENT       (u32)0x00000004        /* The message parser handled an unexpected event */
 #define _ANT_FLAGS_UNEXPECTED_MSG         (u32)0x00000008        /* The message parser handled an unexpected message */
 
-#define ANT_ERROR_FLAGS_MASK              (u32)0x0000FFFF        /* Mask out all error flags */
-#define ANT_ERROR_FLAGS_COUNT             (u8)4                  /* Current number of error flags */
+#define U32_ANT_ERROR_FLAGS_MASK          (u32)0x0000FFFF        /* Mask out all error flags */
+#define U8_ANT_ERROR_FLAGS_COUNT          (u8)4                  /* Current number of error flags */
 
 /* Status flags */
 #define _ANT_FLAGS_RESTART                (u32)0x00010000        /* An ANT restart message was received */
@@ -174,27 +174,27 @@ Constants / Definitions
 
 
 /* #### Default channel configuration parameters #### */
-#define	ANT_DEVICE_ID_LO_DEFAULT		      (u8)0x00
-#define ANT_DEVICE_ID_HI_DEFAULT			    (u8)0x20
-#define	ANT_DEVICE_TYPE_DEFAULT					  (u8)0x01
-#define	ANT_TRANSMISSION_TYPE_DEFAULT		  (u8)0x01
+#define	U8_ANT_DEVICE_ID_LO_DEFAULT		       (u8)0x00
+#define U8_ANT_DEVICE_ID_HI_DEFAULT		       (u8)0x20
+#define	U8_ANT_DEVICE_TYPE_DEFAULT			     (u8)0x01
+#define	U8_ANT_TRANSMISSION_TYPE_DEFAULT   	 (u8)0x01
 
-#define ANT_CHANNEL_DEFAULT               (u8)0
-#define ANT_CHANNEL_TYPE_DEFAULT          CHANNEL_TYPE_MASTER
-#define ANT_NETWORK_DEFAULT               (u8)0
+#define U8_ANT_CHANNEL_DEFAULT               (u8)0
+#define U8_ANT_CHANNEL_TYPE_DEFAULT          CHANNEL_TYPE_MASTER
+#define U8_ANT_NETWORK_DEFAULT               (u8)0
 
-#define ANT_CHANNEL_PERIOD_DEC_DEFAULT    (u16)8192
-#define ANT_CHANNEL_PERIOD_HEX_DEFAULT    (u16)0x2000
-#define ANT_CHANNEL_PERIOD_HI_DEFAULT		  (u8)0x20
-#define ANT_CHANNEL_PERIOD_LO_DEFAULT		  (u8)0x00
+#define U16_ANT_CHANNEL_PERIOD_DEC_DEFAULT   (u16)8192
+#define U16_ANT_CHANNEL_PERIOD_HEX_DEFAULT   (u16)0x2000
+#define U8_ANT_CHANNEL_PERIOD_HI_DEFAULT		 (u8)0x20
+#define U8_ANT_CHANNEL_PERIOD_LO_DEFAULT		 (u8)0x00
 
-#define ANT_FREQUENCY_DEFAULT						  (u8)55
-#define ANT_TX_POWER_DEFAULT						  RADIO_TX_POWER_4DBM
+#define U8_ANT_FREQUENCY_DEFAULT				 	   (u8)55
+#define U8_ANT_TX_POWER_DEFAULT						  RADIO_TX_POWER_4DBM
 /* #### end of default channel configuration parameters ####*/
 
-#define ANT_ACTIVITY_TIME_COUNT   (u32)10000    /* Value used in a while loop that is waiting for an activity to be completed */
-#define ANT_SRDY_DELAY            (u32)200      /* A loop-kill delay to provide guaranteed minimum space for SRDY messages */
-#define ANT_SRDY_PERIOD           (u32)20       /* A loop-kill delay to stretch the SRDY pulse out */
+#define U32_ANT_ACTIVITY_TIME_COUNT   (u32)10000    /* Value used in a while loop that is waiting for an activity to be completed */
+#define U32_ANT_SRDY_DELAY            (u32)200      /* A loop-kill delay to provide guaranteed minimum space for SRDY messages */
+#define U32_ANT_SRDY_PERIOD           (u32)20       /* A loop-kill delay to stretch the SRDY pulse out */
 
 
 /* Network number */

@@ -125,7 +125,7 @@ void UserApp1RunActiveState(void)
 {
   UserApp1_pfStateMachine();
 
-} /* end UserApp1RunActiveState */
+} /* end UserApp1RunActiveState() */
 
 
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -150,8 +150,6 @@ static void UserApp1SM_Error(void)
 {
   
 } /* end UserApp1SM_Error() */
-
-
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
