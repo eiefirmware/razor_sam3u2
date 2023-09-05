@@ -39,7 +39,7 @@ State Machine Declarations
 static void BoardTestSM_SetupAnt(void);
 static void BoardTestSM_Idle(void);
 
-void BoardTestSM_Error(void);
+static void BoardTestSM_Error(void);
 
 
 /***********************************************************************************************************************
