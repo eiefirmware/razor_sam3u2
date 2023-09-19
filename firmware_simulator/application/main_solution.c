@@ -70,9 +70,11 @@ void main(void)
   ServerType* psServerList = NULL;
   ServerType* psServerListParser = NULL;
   ServerType* psServerListDoomed = NULL;
+  
   bool bOrderDrink = FALSE;
   DrinkType eDrink = BEER;
   u8 u8EmptyCount;
+  
   const char au8MessageDrinkOrdered[]  = "Drink ordered   ";
   const char au8MessageDrinkServed[]   = "Drink served    ";
   const char au8MessageNewServer[]     = "New server added";
@@ -90,7 +92,7 @@ void main(void)
       psServerListParser = psServerList;
       while( (psServerListParser != NULL) && bOrderDrink)
       {
-        for(u8 i = 0; i < MAX_DRINKS; i++)
+        for(u8 i = 0; i < U8_MAX_DRINKS; i++)
         {
           if(psServerListParser->asServingTray[i] == EMPTY)
           {
@@ -133,7 +135,7 @@ void main(void)
 
         
     /* Check if it is time to remove a drink */
-    if(u32LoopCounter % DRINK_SERVE_TIME == 0)
+    if(u32LoopCounter % U32_DRINK_SERVE_TIME == 0)
     {
       /* Select one of the servers somewhat randomly based on the number of the last drink ordered */
       psServerListParser = psServerList;
@@ -150,12 +152,12 @@ void main(void)
         
         /* Look through the tray to find a drink to remove and check if the tray is empty */
         u8EmptyCount = 0;
-        for(u8 i = 0; i < MAX_DRINKS; i++)
+        for(u8 i = 0; i < U8_MAX_DRINKS; i++)
         {
           if(psServerListParser->asServingTray[i] != EMPTY)
           {
             /* If this is the first drink found on the tray, it's the one to be removed */
-            if( i - u8EmptyCount == 0 )
+            if(u8EmptyCount == 0)
             {
               /* Remove the drink and queue message */
               psServerListParser->asServingTray[i] = EMPTY;
@@ -164,6 +166,7 @@ void main(void)
               bNewMessage = TRUE;
             }
           }
+          /* Otherwise the slot is empty to count it */
           else
           {
             u8EmptyCount++;
@@ -171,9 +174,10 @@ void main(void)
         }
         
         /* If the server's tray is now empty, remove the server */
-        if(u8EmptyCount == MAX_DRINKS)
+        if(u8EmptyCount == U8_MAX_DRINKS)
         {
-          /* Put a pointer on this node as it will be removed and put the parser back to the start of the list */
+          /* Put a pointer on this node as it will be removed and put 
+          the parser back to the start of the list */
           psServerListDoomed = psServerListParser;
           psServerListParser = psServerList;
           
@@ -199,10 +203,10 @@ void main(void)
           Main_u8Servers--;
           strcpy(au8MessageCurrent, au8MessageServerRemoved);
           bNewMessage = TRUE;
-        } /* end if(u8EmptyCount == MAX_DRINKS) */
+        } /* end if(u8EmptyCount == U8_MAX_DRINKS) */
         
       } /* if(psServerListParser != NULL) */
-    } /* if(u32LoopCounter % DRINK_SERVE_TIME == 0) */
+    } /* if(u32LoopCounter % U32_DRINK_SERVE_TIME == 0) */
 
 
     /* Check to see if a new message was added */
@@ -251,10 +255,13 @@ bool InitializeServer(ServerType** psServer_)
   (*psServer_)->u8ServerNumber = Main_u8Servers;
 
   /* Start with an empty tray */
-  for(u8 i = 0; i < MAX_DRINKS; i++)
+  for(u8 i = 0; i < U8_MAX_DRINKS; i++)
   {
     (*psServer_)->asServingTray[i] = EMPTY;
   }
+  
+  /* A new server cannot be pointing to any other servers */
+  (*psServer_)->psNextServer = NULL;
 
   return(TRUE);
   
@@ -281,7 +288,7 @@ bool CreateServer(ServerType** psServerList_)
   ServerType** pServerParser;
   
   /* Check that we have are not at the maximum server limit */
-  if(Main_u8Servers >= MAX_SERVERS)
+  if(Main_u8Servers >= U8_MAX_SERVERS)
   {
     return(FALSE);
   }
@@ -289,7 +296,7 @@ bool CreateServer(ServerType** psServerList_)
   /* Try to create the server object */
   psNewServer = malloc( sizeof(ServerType) );
   
-  /* Check that we have are not at the maximum server limit */
+  /* Check that we are not at the maximum server limit */
   if(psNewServer == NULL)
   {
     return(FALSE);

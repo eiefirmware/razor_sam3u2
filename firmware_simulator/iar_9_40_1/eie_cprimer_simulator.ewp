@@ -667,7 +667,7 @@
                 </option>
                 <option>
                     <name>OCOutputOverride</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
@@ -689,7 +689,7 @@
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>0</hasPrio>
+                <hasPrio>32</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
             </data>
         </settings>
@@ -710,7 +710,7 @@
                 </option>
                 <option>
                     <name>IlinkOutputFile</name>
-                    <state>mpgl1.out</state>
+                    <state>eie_cprimer_simulator</state>
                 </option>
                 <option>
                     <name>IlinkDebugInfoEnable</name>
@@ -2238,6 +2238,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\application\main_solution.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\application\main_solution_framework.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\drivers\utilities.c</name>

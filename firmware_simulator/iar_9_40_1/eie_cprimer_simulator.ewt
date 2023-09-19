@@ -2913,6 +2913,9 @@
                 <name>$PROJ_DIR$\..\application\main_solution.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\application\main_solution_framework.c</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\drivers\utilities.c</name>
             </file>
         </group>
