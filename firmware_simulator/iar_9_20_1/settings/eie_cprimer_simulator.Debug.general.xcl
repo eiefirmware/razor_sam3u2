@@ -1,0 +1,13 @@
+"C:\Program Files\IAR Systems\EWARM_9_20_1\arm\bin\armPROC.dll" 
+
+"C:\Program Files\IAR Systems\EWARM_9_20_1\arm\bin\armSIM2.dll" 
+
+"D:\_Git\EiEFirmware\razor_sam3u2\firmware_simulator\iar_9_20_1\Debug\Exe\eie_cprimer_simulator.out" 
+
+--plugin="C:\Program Files\IAR Systems\EWARM_9_20_1\arm\bin\armbat.dll" 
+
+--device_macro="C:\Program Files\IAR Systems\EWARM_9_20_1\arm\config\debugger\Microchip\SAM3U.dmac" 
+
+
+
+
