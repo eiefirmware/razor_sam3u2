@@ -4,3 +4,6 @@ Debug/
 *.TMP
 *.wspos
 doxygen/html
+firmware_simulator/iar_9_40_1/settings/eie_cprimer_simulator.dnx
+firmware_simulator/iar_9_40_1/settings/eie_cprimer_simulator.dnx
+firmware_simulator/iar_9_40_1/settings/eie_cprimer_simulator.dnx

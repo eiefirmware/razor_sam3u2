@@ -1,0 +1,13 @@
+"D:\IAR\EWARM_8_10_1\arm\bin\armproc.dll" 
+
+"D:\IAR\EWARM_8_10_1\arm\bin\armsim2.dll" 
+
+"E:\Github\razor_sam3u2\firmware_simulator\iar_8_10_1\Debug\Exe\eie_cprimer_simulator.out" 
+
+--plugin "D:\IAR\EWARM_8_10_1\arm\bin\armbat.dll" 
+
+--device_macro "D:\IAR\EWARM_8_10_1\arm\config\debugger\Atmel\SAM3U.dmac" 
+
+
+
+
