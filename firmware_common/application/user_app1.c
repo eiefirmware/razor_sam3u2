@@ -142,14 +142,14 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
-  static u32 u32Counter = 0;
+  static u16 u16Counter = 0;
   static bool bLightIsOn = FALSE;
   
-  /* Increment u32Counter every 1ms cycle and check if it's done */
-  u32Counter++;
-  if(u32Counter == U32_COUNTER_PERIOD_MS)
+  /* Increment u16Counter every 1ms cycle and check if it's done */
+  u16Counter++;
+  if(u16Counter == U16_COUNTER_PERIOD_MS)
   {
-    u32Counter = 0;
+    u16Counter = 0;
     
     if(bLightIsOn)
     {
