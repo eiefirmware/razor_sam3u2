@@ -95,6 +95,7 @@ void UserApp1Initialize(void)
   /* If good initialization, set state to Idle */
   if( 1 )
   {
+    HEARTBEAT_OFF();
     UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
   else
@@ -140,7 +141,25 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
+    static u16 u16counter = 0;
+    static bool statetrack = FALSE;
     
+    u16counter++;
+    
+    if (u16counter == U16_COUNTER_PERIOD_MS) {
+      u16counter = 0;
+      
+      if (statetrack){
+        HEARTBEAT_OFF();
+        statetrack = FALSE;
+      }
+    
+      else{
+        HEARTBEAT_ON();
+        statetrack = TRUE;
+      }
+    }
+       
 } /* end UserApp1SM_Idle() */
      
 
