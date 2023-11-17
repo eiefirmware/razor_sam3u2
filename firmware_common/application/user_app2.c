@@ -140,7 +140,10 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp2SM_Idle(void)
 {
-    
+    /* Block the processor for over 1ms to force a 1ms violation debug message.
+Note a 'for' loop is about 4 instruction cycles long and each instruction cycle is 21ns. 
+1 ms / 21 ns ~= 50,000. So a 50k loop will be about 3ms */
+  // for(u32 i=0; i<50000; i++);
 } /* end UserApp2SM_Idle() */
      
 
