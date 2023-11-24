@@ -165,27 +165,74 @@ static void UserApp1SM_Idle(void)
   static u8 u8NumCharsMessage[] = "\n\rCharacters in buffer: ";
   static u8 u8BufferMessage[] = "\n\rBuffer contents:\n\r";
   u8 u8CharCount;
-  
+  static u8 u8NameMessage[] = "\n\rNumber of times name is typed: ";
+
+#if 0
+  /* Read the current scanf buffer into au8UserInputBuffer */
   if(WasButtonPressed(BUTTON1))
   {
     ButtonAcknowledge(BUTTON1);
-    /* Read the buffer */
+    
+    /* Read the buffer and add a NULL terminator to convert it to a string*/
     u8CharCount = DebugScanf(au8UserInputBuffer);
     au8UserInputBuffer[u8CharCount] = '\0';
     
     /* Print the heading message and then print the buffer */
     DebugPrintf(u8BufferMessage);
-    DebugPrintNumber(au8UserInputBuffer);
+    DebugPrintf(au8UserInputBuffer);
     DebugLineFeed();
   }
+#endif
+
+  /* Number of times name is typed */
+  if(WasButtonPressed(BUTTON1))
+  {
+    ButtonAcknowledge(BUTTON1);   
+    
+    u8CharCount = DebugScanf(au8UserInputBuffer);
+    au8UserInputBuffer[u8CharCount] = '\0';  // add terminator to end of string
+    
+    u8 u8Name[] = "test";
+    u8 u8wordlen = strlen(u8Name);
+    u8 u8NameCount = 0;
+    u8 u8NameCount1 = 0;
+    
+    int j = 0;
+    for(int i = 0; i < u8CharCount;)
+    {
+      while(au8UserInputBuffer[i] == u8Name[j])
+      {
+        u8NameCount++;
+        i++;
+        j++;
+      }    
+      
+      if(u8NameCount == u8wordlen)
+      {
+        u8NameCount1++;
+        u8NameCount = 0;
+      }    
+      else 
+      {
+        i++;
+      }
+    }
+    
+    DebugPrintf(u8NameMessage);
+
+    DebugPrintNumber(u8NameCount1);
+    DebugLineFeed();
+    //DebugSetPassthrough();
+  }
+    
   
-  
-  
+  // https://embeddedinembedded.com/wp-content/uploads/2023/11/image-54-768x349.png
   
   /* Print message with number of characters in scanf buffer */
   if(WasButtonPressed(BUTTON0))
   {
     ButtonAcknowledge(BUTTON0);
+    
     DebugPrintf(u8NumCharsMessage);
     DebugPrintNumber(G_u8DebugScanfCharCount);
     DebugLineFeed();
