@@ -163,7 +163,7 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
   static u8 u8NumCharsMessage[] = "\n\rCharacters in buffer: ";
-  static u8 u8BufferMessage[] = "\n\rBuffer contents:\n\r";
+  // static u8 u8BufferMessage[] = "\n\rBuffer contents:\n\r";
   u8 u8CharCount;
   static u8 u8NameMessage[] = "\n\rNumber of times name is typed: ";
 
@@ -192,37 +192,24 @@ static void UserApp1SM_Idle(void)
     u8CharCount = DebugScanf(au8UserInputBuffer);
     au8UserInputBuffer[u8CharCount] = '\0';  // add terminator to end of string
     
-    u8 u8Name[] = "test";
+    u8 u8Name[] = "Jenn";
     u8 u8wordlen = strlen(u8Name);
-    u8 u8NameCount = 0;
-    u8 u8NameCount1 = 0;
-    
-    int j = 0;
-    for(int i = 0; i < u8CharCount;)
-    {
-      while(au8UserInputBuffer[i] == u8Name[j])
-      {
-        u8NameCount++;
-        i++;
-        j++;
-      }    
-      
-      if(u8NameCount == u8wordlen)
-      {
-        u8NameCount1++;
-        u8NameCount = 0;
-      }    
-      else 
-      {
-        i++;
+    u8 u8Count = 0;
+  
+    for(u8 i = 0; i< USER1_INPUT_BUFFER_SIZE;){
+      // loop through input buffer
+      if(strncmp(&au8UserInputBuffer[i], u8Name, u8wordlen) == 0){
+        // if comparing the input with the name matches
+        u8Count++; // increment counter
+        i += u8wordlen; // move pointer over the length of the name
+      } else {
+        i++;  // no match, increment pointer by one char only
       }
-    }
+     }
     
     DebugPrintf(u8NameMessage);
-
-    DebugPrintNumber(u8NameCount1);
+    DebugPrintNumber(u8Count);
     DebugLineFeed();
-    //DebugSetPassthrough();
   }
     
   
