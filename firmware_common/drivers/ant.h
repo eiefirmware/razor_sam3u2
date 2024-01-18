@@ -189,7 +189,7 @@ Constants / Definitions
 #define U8_ANT_CHANNEL_PERIOD_LO_DEFAULT		 (u8)0x00
 
 #define U8_ANT_FREQUENCY_DEFAULT				 	   (u8)55
-#define U8_ANT_TX_POWER_DEFAULT						  RADIO_TX_POWER_4DBM
+#define U8_ANT_TX_POWER_DEFAULT						   RADIO_TX_POWER_4DBM
 /* #### end of default channel configuration parameters ####*/
 
 #define U32_ANT_ACTIVITY_TIME_COUNT   (u32)10000    /* Value used in a while loop that is waiting for an activity to be completed */

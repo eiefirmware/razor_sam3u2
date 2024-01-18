@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>2804029231</Checksum>
+        <Checksum>1120930650</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -29,13 +29,13 @@
         <InstrCount>0</InstrCount>
     </Disassembly>
     <JLinkDriver>
-        <LeaveTargetRunning>_ 0</LeaveTargetRunning>
-        <CStepIntDis>_ 0</CStepIntDis>
         <jlinkResetStyle>12</jlinkResetStyle>
         <jlinkResetStrategy>0</jlinkResetStrategy>
         <TraceBufferSize>0x10000</TraceBufferSize>
         <TraceStallIfFIFOFull>0x0</TraceStallIfFIFOFull>
         <TracePortSize>0x0</TracePortSize>
+        <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+        <CStepIntDis>_ 0</CStepIntDis>
     </JLinkDriver>
     <SfrWindow>
         <Show>1 1</Show>
@@ -90,8 +90,19 @@
         <FirstRun>0</FirstRun>
         <MemConfigValue>D:\IAR\EWARM_9_40_1\arm\config\debugger\Microchip\ATSAM3U2C.ddf</MemConfigValue>
     </PlDriver>
+    <Registers>
+        <regBase0>R0 10</regBase0>
+        <regBase1>R11 10</regBase1>
+    </Registers>
+    <ArmDriver>
+        <EnableCache>0</EnableCache>
+        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
+    </ArmDriver>
     <struct_types>
-        <Fmt0>ButtonStatusType-u32DebounceTimeStart	3	0</Fmt0>
+        <Fmt0>AntAssignChannelInfoType-AntChannel	3	0</Fmt0>
+        <Fmt1>AntAssignChannelInfoType-AntChannelType	4	0</Fmt1>
+        <Fmt2>AntAssignChannelInfoType-AntFlags	1	0</Fmt2>
+        <Fmt3>ButtonStatusType-u32DebounceTimeStart	3	0</Fmt3>
     </struct_types>
     <watch_formats>
         <Fmt0>{W}1:0x400E0E00	4	0</Fmt0>
@@ -102,10 +113,6 @@
         <Fmt5>{W}3:u32CurrentButtonLocation	4	0</Fmt5>
         <Fmt6>{W}3:u32GPIOInterruptSources	4	0</Fmt6>
     </watch_formats>
-    <Registers>
-        <regBase0>R0 10</regBase0>
-        <regBase1>R11 10</regBase1>
-    </Registers>
     <Trace2>
         <Enabled>0</Enabled>
         <ShowSource>0</ShowSource>
@@ -120,16 +127,13 @@
         <Graph>0</Graph>
         <Symbiont>0</Symbiont>
     </DriverProfiling>
-    <ArmDriver>
-        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
-        <EnableCache>0</EnableCache>
-    </ArmDriver>
     <DisassembleMode>
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
         <Bp0>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.c}.292.3" 0 0 1 "" 0 "" 0</Bp0>
-        <Count>1</Count>
+        <Bp1>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\application\ascii_board_test.c}.254.5" 0 0 1 "" 0 "" 0</Bp1>
+        <Count>2</Count>
     </Breakpoints2>
     <Aliases>
         <Count>0</Count>
