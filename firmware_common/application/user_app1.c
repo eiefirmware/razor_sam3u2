@@ -46,6 +46,7 @@ All Global variable names shall start with "G_<type>UserApp1"
 /* New variables */
 volatile u32 G_u32UserApp1Flags;                          /*!< @brief Global state flags */
 static u8 au8UserInputBuffer[USER1_INPUT_BUFFER_SIZE]; /* Char buffer */
+u32 u32Count = 0;
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
@@ -184,6 +185,7 @@ static void UserApp1SM_Idle(void)
   }
 #endif
 
+#if 0
   /* Number of times name is typed */
   if(WasButtonPressed(BUTTON1))
   {
@@ -212,6 +214,48 @@ static void UserApp1SM_Idle(void)
     DebugLineFeed();
   }
     
+#endif
+
+#if 1
+  if(WasButtonPressed(BUTTON1))
+  {
+    ButtonAcknowledge(BUTTON1);   
+    
+    u8CharCount = DebugScanf(au8UserInputBuffer);
+    au8UserInputBuffer[u8CharCount] = '\0';  // add terminator to end of string
+    
+    u8 u8Name[] = "Jenn";
+    u8 u8wordlen = strlen(u8Name);
+//    u8 u8Count = 0;
+  
+    for(u8 i = 0; i < USER1_INPUT_BUFFER_SIZE;){
+      // loop through input buffer
+      if(strncmp(&au8UserInputBuffer[i], u8Name, u8wordlen) == 0){
+        // if comparing the input with the name matches
+        u32Count++; // increment counter
+        i += u8wordlen; // move pointer over the length of the name
+      } else {
+        i++;  // no match, increment pointer by one char only
+      }
+     }
+//    
+//    for(u8 i = 0; i < u8CharCount; i++){
+//      au8UserInputBuffer[i] = '\0';
+//    }
+    
+    DebugPrintf(u8NameMessage);
+    DebugPrintNumber(u32Count);
+    DebugLineFeed();
+  }
+  
+  if(WasButtonPressed(BUTTON3)){
+    ButtonAcknowledge(BUTTON3);
+    u32Count = u32Count * 10;
+    DebugPrintf("*****");
+    DebugPrintNumber(u32Count);
+    DebugPrintf("*****");
+  }
+  
   
   // https://embeddedinembedded.com/wp-content/uploads/2023/11/image-54-768x349.png
   
@@ -224,7 +268,7 @@ static void UserApp1SM_Idle(void)
     DebugPrintNumber(G_u8DebugScanfCharCount);
     DebugLineFeed();
   }
-    
+#endif
   
 } /* end UserApp1SM_Idle() */
      
