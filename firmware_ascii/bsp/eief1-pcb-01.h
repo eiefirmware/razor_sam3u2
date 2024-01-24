@@ -85,7 +85,7 @@ typedef enum {BUZZER1 = AT91C_PWMC_CHID0, BUZZER2=AT91C_PWMC_CHID1} BuzzerChanne
 /*----------------------------------------------------------------------------------------------------------------------
 %ANT% Interface Configuration                                                                                                  
 ----------------------------------------------------------------------------------------------------------------------*/
-#define ANT_SSP_FLAGS           G_u32Ssp2ApplicationFlags  /*!< @brief Assigns the correct global Application Flags to a self-documenting symbol */
+//#define ANT_SSP_FLAGS           G_u32Ssp2ApplicationFlags  /*!< @brief Assigns the correct global Application Flags to a self-documenting symbol */
 
 #define ANT_MRDY_READ_REG      (AT91C_BASE_PIOB->PIO_PDSR & PB_23_ANT_MRDY) /*!< @brief Macro to read MRDY */
 #define ANT_MRDY_CLEAR_REG     (AT91C_BASE_PIOB->PIO_CODR = PB_23_ANT_MRDY) /*!< @brief Macro to clear MRDY */   

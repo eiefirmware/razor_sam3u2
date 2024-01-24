@@ -50,11 +50,25 @@ State Machine Declarations
 static void UserApp1SM_Idle(void);    
 static void UserApp1SM_Error(void);         
 
+static void UserApp1SM_WaitAntReady(void);
+static void UserApp1SM_WaitChannelOpen(void);
+static void UserApp1SM_ChannelOpen(void);
+
 
 
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
+/* Required constants for ANT channel configuration */
+#define U8_ANT_CHANNEL_USERAPP           ANT_CHANNEL_0        /* ANT_CHANNEL_x, x = 0-7 */
+#define U8_ANT_DEVICE_LO_USERAPP         (u8)0x34             /* Low byte of two-byte Device ID */
+#define U8_ANT_DEVICE_HI_USERAPP         (u8)0x12             /* High byte of two-byte Device ID */
+#define U8_ANT_DEVICE_TYPE_USERAPP       (u8)1                /* 1 – 255 */
+#define U8_ANT_TRANSMISSION_TYPE_USERAPP (u8)1                /* 1-127 (MSB is pairing bit) */
+#define U8_ANT_CHANNEL_PERIOD_LO_USERAPP (u8)0x00             /* Low byte of two-byte channel period 0x0001 – 0x7fff */
+#define U8_ANT_CHANNEL_PERIOD_HI_USERAPP (u8)0x20             /* High byte of two-byte channel period */
+#define U8_ANT_FREQUENCY_USERAPP         (u8)50               /* 2400MHz + this number 0 – 99 */
+#define U8_ANT_TX_POWER_USERAPP          RADIO_TX_POWER_4DBM  /* RADIO_TX_POWER_4DBM, RADIO_TX_POWER_0DBM, RADIO_TX_POWER_MINUS5DBM, RADIO_TX_POWER_MINUS10DBM, RADIO_TX_POWER_MINUS20DBM */
 
 
 #endif /* __USER_APP1_H */

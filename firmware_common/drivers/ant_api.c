@@ -14,13 +14,10 @@ to be handled seperately as an add-on to this API.
 Copy the following definitions to your client task:
   
 // Globals for passing data from the ANT application to the API
-
+extern AntSetupDataType G_stAntSetupData;                                 // From ant.c 
 extern u32 G_u32AntApiCurrentMessageTimeStamp;                            // From ant_api.c
-
 extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // From ant_api.c
-
 extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
-
 extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
 
 
@@ -187,7 +184,7 @@ bool AntAssignChannel(AntAssignChannelInfoType* psAntSetupInfo_)
   /* Check to ensure the selected channel is available */
   if(AntRadioStatusChannel(psAntSetupInfo_->AntChannel) != ANT_UNCONFIGURED)
   {
-    DebugPrintf("AntAssignChannel error: channel is not unconfigured\n\r");
+    DebugPrintf("AntAssignChannel error: channel already configured\n\r");
     return FALSE;
   }
   
@@ -819,6 +816,7 @@ static void AntApiSM_AssignChannel(void)
     else
     {
       /* Report the error and return.  Channel flags will remain clear for application to check. */
+      G_au8AntMessageAssign[12] = G_stAntMessageResponse.u8Channel + NUMBER_ASCII_TO_DEC;
       DebugPrintf(G_au8AntMessageAssign);
       DebugPrintf(G_au8AntMessageFail);
       AntApi_StateMachine = AntApiSM_Idle;

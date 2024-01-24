@@ -1724,7 +1724,10 @@ static void AntSyncSerialInitialize(void)
 
     /* Send out version request message and expect response */
     G_au8ANTGetVersion[4] = AntCalculateTxChecksum(&G_au8ANTGetVersion[0]);
-    AntTxMessage(&G_au8ANTGetVersion[0]);   
+    if(!AntTxMessage(&G_au8ANTGetVersion[0]))
+    {
+      DebugPrintf("\n\rAntTxMessage FAIL\n\r");
+    }
     
     /* Process the message through AntExpectResponse */
     u8ErrorCount += AntExpectResponse(MESG_VERSION_ID, ANT_MSG_TIMEOUT_MS);

@@ -154,7 +154,7 @@ Includes
 /* %SPI% Blade SPI Peripheral Allocation (SPI0) */
 #define BLADE_BASE_PORT             AT91C_BASE_PIOA
 #define BLADE_CS_PIN                PA_16_BLADE_CS
-#define BLADE_SPI_FLAGS             G_u32Spi0ApplicationFlags
+//#define BLADE_SPI_FLAGS             G_u32Spi0ApplicationFlags
 #define BLADE_SPI_PERIPHERAL        AT91C_ID_SPI0
 
 #define SPI0_CR_INIT                BLADE_SPI_CR_INIT
