@@ -203,6 +203,67 @@ static void UserApp1SM_WaitChannelOpen(void)
 /* ANT channel open: process messages and update data */
 static void UserApp1SM_ChannelOpen(void)
 {
+  static u8 au8TestMessage[] = {0, 0, 0, 0, 0xA5, 0, 0, 0}; 
+  u8 au8DataContent[] = "xxxxxxxxxxxxxxxx";
+
+  if( AntReadAppMessageBuffer() )
+  {
+    /* New data message: check what it is */
+    if(G_eAntApiCurrentMessageClass == ANT_DATA)
+    {
+      /* We got some data - write out the hex numbers to the LCD */
+      for(u8 i = 0; i < ANT_DATA_BYTES; i++) 
+      { 
+        au8DataContent[2 * i] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] / 16); 
+        au8DataContent[2 * i + 1] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] % 16); 
+      } 
+      LcdMessage(LINE2_START_ADDR, au8DataContent);
+    }
+    else if(G_eAntApiCurrentMessageClass == ANT_TICK)
+    {
+      /* A channel period has gone by: typically this is when new data should be queued to be sent */
+      /* Update the message count and queue the new message data */
+      au8TestMessage[7]++;
+      if(au8TestMessage[7] == 0)
+      {
+        au8TestMessage[6]++;
+        if(au8TestMessage[6] == 0)
+        {
+          au8TestMessage[5]++;
+        }
+      }  
+      
+      /* Update button status */
+      /* Check all the buttons and update au8TestMessage according to the button state */
+      au8TestMessage[0] = 0x00;
+      au8TestMessage[1] = 0x00;
+      au8TestMessage[2] = 0x00;
+      au8TestMessage[3] = 0x00;
+
+      if( IsButtonPressed(BUTTON0) )
+      {
+        au8TestMessage[0] = 0xff;
+      }
+
+      if( IsButtonPressed(BUTTON1) )
+      {
+        au8TestMessage[1] = 0xff;
+      }
+
+      if( IsButtonPressed(BUTTON2) )
+      {
+        au8TestMessage[2] = 0xff;
+      }
+
+      if( IsButtonPressed(BUTTON3) )
+      {
+        au8TestMessage[3] = 0xff;
+      }
+
+      AntQueueBroadcastMessage(U8_ANT_CHANNEL_USERAPP, au8TestMessage);     
+      
+    } /* end ANT_TICK */
+  } /* end AntReadAppMessageBuffer() */
     
 } /* end UserApp1SM_ChannelOpen() */
 

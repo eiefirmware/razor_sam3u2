@@ -169,7 +169,7 @@ void LedOff(LedNameType eLED_)
 {
   u32 *pu32OffAddress;
   
-  pu32OffAddress = 0;
+  //pu32OffAddress = 0;
 
   /* Configure set and clear addresses */
   if(G_asBspLedConfigurations[(u8)eLED_].eActiveState == ACTIVE_HIGH)

@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>2046761099</Checksum>
+        <Checksum>2029191654</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -90,22 +90,27 @@
         <FirstRun>0</FirstRun>
         <MemConfigValue>D:\IAR\EWARM_9_40_1\arm\config\debugger\Microchip\ATSAM3U2C.ddf</MemConfigValue>
     </PlDriver>
+    <ArmDriver>
+        <EnableCache>0</EnableCache>
+        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
+    </ArmDriver>
+    <Registers>
+        <regBase0>R0 10</regBase0>
+        <regBase1>R11 10</regBase1>
+    </Registers>
     <struct_types>
         <Fmt0>ButtonStatusType-u32DebounceTimeStart	3	0</Fmt0>
     </struct_types>
     <watch_formats>
         <Fmt0>{W}1:0x400E0E00	4	0</Fmt0>
         <Fmt1>{W}1:PIOB_PSR	4	0</Fmt1>
-        <Fmt2>{W}3:G_u32SystemFlags	4	0</Fmt2>
-        <Fmt3>{W}3:G_u32SystemTime1ms	3	0</Fmt3>
-        <Fmt4>{W}3:u32ButtonInterrupts	4	0</Fmt4>
-        <Fmt5>{W}3:u32CurrentButtonLocation	4	0</Fmt5>
-        <Fmt6>{W}3:u32GPIOInterruptSources	4	0</Fmt6>
+        <Fmt2>{W}3:G_u32AntFlags	4	0</Fmt2>
+        <Fmt3>{W}3:G_u32SystemFlags	4	0</Fmt3>
+        <Fmt4>{W}3:G_u32SystemTime1ms	3	0</Fmt4>
+        <Fmt5>{W}3:u32ButtonInterrupts	4	0</Fmt5>
+        <Fmt6>{W}3:u32CurrentButtonLocation	4	0</Fmt6>
+        <Fmt7>{W}3:u32GPIOInterruptSources	4	0</Fmt7>
     </watch_formats>
-    <Registers>
-        <regBase0>R0 10</regBase0>
-        <regBase1>R11 10</regBase1>
-    </Registers>
     <Trace2>
         <Enabled>0</Enabled>
         <ShowSource>0</ShowSource>
@@ -120,10 +125,6 @@
         <Graph>0</Graph>
         <Symbiont>0</Symbiont>
     </DriverProfiling>
-    <ArmDriver>
-        <EnableCache>0</EnableCache>
-        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
-    </ArmDriver>
     <DisassembleMode>
         <mode>0</mode>
     </DisassembleMode>
