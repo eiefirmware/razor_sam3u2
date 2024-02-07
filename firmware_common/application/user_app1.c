@@ -69,7 +69,7 @@ static u32 UserApp1_u32DataMsgCount = 0;   /* ANT_DATA packets received */
 static u32 UserApp1_u32TickMsgCount = 0;   /* ANT_TICK packets received */
 
 static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
-//static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
+static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
 
 
 /**********************************************************************************************************************
@@ -134,11 +134,10 @@ void UserApp1Initialize(void)
     }
   } 
   
-  /* If good initialization, set state to Idle */
+  /* If good initialization, proceed to wait state for channel assignment. */
   if( AntAssignChannel(&sChannelInfo) )
   {
     /* Channel configuration is queued, so advance */
-    LedOff(RED);
     UserApp1_pfStateMachine = UserApp1SM_WaitAntReady;
   }
   else
@@ -187,26 +186,58 @@ static void UserApp1SM_WaitAntReady(void)
 {
   if(AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
   {
-    if(AntOpenChannelNumber(U8_ANT_CHANNEL_USERAPP))
-    {
-      UserApp1_pfStateMachine = UserApp1SM_WaitChannelOpen;
-    }
-    else
-    {
-      UserApp1_pfStateMachine = UserApp1SM_Error;   
-    }
+    /* Update status LEDs and advance to Idle */
+    LedOff(RED);
+    LedOn(YELLOW);
+
+    UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
     
 } /* end UserApp1SM_WaitAntReady() */
 
 
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* Wait for channel to be open */
+/* Wait for BUTTON0 to open channel (LED is yellow) */
+static void UserApp1SM_Idle(void)
+{
+  /* Look for BUTTON 0 to open channel */
+  if( WasButtonPressed(BUTTON0) )
+  {
+    /* Got the button, so complete one-time actions before next state */
+    ButtonAcknowledge(BUTTON0);
+    
+    /* Queue open channel and change LED0 from yellow to blinking green to indicate channel is opening */
+    AntOpenChannelNumber(U8_ANT_CHANNEL_USERAPP);
+
+    LedOff(YELLOW);
+    LedBlink(GREEN, LED_2HZ);
+    
+    /* Set timer and advance states */
+    UserApp1_u32Timeout = G_u32SystemTime1ms;
+    UserApp1_pfStateMachine = UserApp1SM_WaitChannelOpen;
+  }
+
+} /* end UserApp1SM_Idle() */
+     
+
+/*-------------------------------------------------------------------------------------------------------------------*/
+/* Wait for channel to be open.  LED status: green blink 2Hz */
 static void UserApp1SM_WaitChannelOpen(void)
 {
   if(AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_OPEN)
   {
+    /* Channel opened: go to ChannelOpen state with solid green */
+    LedOn(GREEN);
     UserApp1_pfStateMachine = UserApp1SM_ChannelOpen;
+  }
+  
+  /* Check for timeout */
+  if( IsTimeUp(&UserApp1_u32Timeout, U32_TIMEOUT_OPEN_CHANNEL) )
+  {
+    AntCloseChannelNumber(U8_ANT_CHANNEL_USERAPP);
+    LedOff(GREEN);
+    LedOn(YELLOW);
+    UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
     
 } /* end UserApp1SM_WaitChannelOpen() */
@@ -216,53 +247,205 @@ static void UserApp1SM_WaitChannelOpen(void)
 /* ANT channel open: process messages and update data */
 static void UserApp1SM_ChannelOpen(void)
 {
-  static u8 au8TestMessage[] = {0, 0, 0, 0, 0xA5, 0, 0, 0}; 
-  u8 au8DataContent[] = "xxxxxxxxxxxxxxxx";
+  static u8 u8LastState = 0xff;
+  static u8 au8TickMessage[] = "EVENT x\n\r";  /* "x" at index [6] will be replaced by the current code */
+  static u8 au8DataContent[] = "xxxxxxxxxxxxxxxx";
+  static u8 au8LastAntData[ANT_APPLICATION_MESSAGE_BYTES] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+  static u8 au8TestMessage[] = {0, 0, 0, 0, 0xA5, 0, 0, 0};
+  bool bGotNewData;
 
+  /* Check for BUTTON0 to close channel */
+  if(WasButtonPressed(BUTTON0))
+  {
+    /* Got the button, so complete one-time actions before next state */
+    ButtonAcknowledge(BUTTON0);
+    
+    /* Queue close channel, initialize the u8LastState variable and change LED to blinking green to indicate channel is closing */
+    AntCloseChannelNumber(U8_ANT_CHANNEL_USERAPP);
+    u8LastState = 0xff;
+    LedOff(BLUE);
+    LedBlink(GREEN, LED_2HZ);
+    
+    /* Set timer and advance states */
+    UserApp1_u32Timeout = G_u32SystemTime1ms;
+    UserApp1_pfStateMachine = UserApp1SM_WaitChannelClose;
+  } /* end if(WasButtonPressed(BUTTON0)) */
+
+  /* A slave channel can close on its own, so explicitly check channel status */
+  if(AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) != ANT_OPEN)
+  {
+    u8LastState = 0xff;
+    LedBlink(GREEN, LED_2HZ);
+    LedOff(BLUE);
+    
+    UserApp1_u32Timeout = G_u32SystemTime1ms;
+    UserApp1_pfStateMachine = UserApp1SM_WaitChannelClose;
+  } /* if(AntRadioStatusChannel() != ANT_OPEN) */
+  
+  /* Check for new messages and process */
   if( AntReadAppMessageBuffer() )
   {
     /* New data message: check what it is */
     if(G_eAntApiCurrentMessageClass == ANT_DATA)
     {
-      /* We got some data - write out the hex numbers to the LCD */
-      for(u8 i = 0; i < ANT_DATA_BYTES; i++) 
-      { 
-        au8DataContent[2 * i] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] / 16); 
-        au8DataContent[2 * i + 1] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] % 16); 
-      } 
-      LcdMessage(LINE2_START_ADDR, au8DataContent);
+      /* If data was received, the channel must be synced with a Master */
+      LedOff(GREEN);
+      LedOn(BLUE);
+      u8LastState = 0xff;
+      UserApp1_u32DataMsgCount++;
+      
+      /* Check if the new data is the same as the old data and update as we go */
+      bGotNewData = FALSE;
+      for(u8 i = 0; i < ANT_APPLICATION_MESSAGE_BYTES; i++)
+      {
+        if(G_au8AntApiCurrentMessageBytes[i] != au8LastAntData[i])
+        {
+          bGotNewData = TRUE;
+          au8LastAntData[i] = G_au8AntApiCurrentMessageBytes[i];
+
+          au8DataContent[2 * i] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] / 16);
+          au8DataContent[2*i+1] = HexToASCIICharUpper(G_au8AntApiCurrentMessageBytes[i] % 16); 
+        }
+      }
+      
+      if(bGotNewData)
+      {
+        /* We got new data: show on LCD */
+        LcdClearChars(LINE2_START_ADDR, 20); 
+        LcdMessage(LINE2_START_ADDR, au8DataContent); 
+
+
+        /* Update our local message counter and send the message back */
+        au8TestMessage[7]++;
+        if(au8TestMessage[7] == 0)
+        {
+          au8TestMessage[6]++;
+          if(au8TestMessage[6] == 0)
+          {
+            au8TestMessage[5]++;
+          }
+        }
+        AntQueueBroadcastMessage(U8_ANT_CHANNEL_USERAPP, au8TestMessage);
+        
+        /* Check for a special packet and respond */
+        if(G_au8AntApiCurrentMessageBytes[0] == 0xA5)
+        {          
+          if(G_au8AntApiCurrentMessageBytes[1] == 1)
+          {
+            LedOn(LCD_RED);
+          }
+          else
+          {
+            LedOff(LCD_RED);            
+          }
+          
+          if(G_au8AntApiCurrentMessageBytes[2] == 1)
+          {
+            LedOn(LCD_GREEN);
+          }
+          else
+          {
+            LedOff(LCD_GREEN);            
+          }
+
+          if(G_au8AntApiCurrentMessageBytes[3] == 1)
+          {
+            LedOn(LCD_BLUE);
+          }
+          else
+          {
+            LedOff(LCD_BLUE);            
+          }
+        }
+      } /* end if(bGotNewData) */
+      
     }
     else if(G_eAntApiCurrentMessageClass == ANT_TICK)
     {
-      /* A channel period has gone by: typically this is when new data should be queued to be sent */    
+      /* A channel period has gone by */    
+      /* Just increment a counter for now */
+      UserApp1_u32TickMsgCount++;
+
+      /* Look at the TICK contents to check the event code and respond only if it's different */
+      if(u8LastState != G_au8AntApiCurrentMessageBytes[ANT_TICK_MSG_EVENT_CODE_INDEX])
+      {
+        /* The state changed so update u8LastState and queue a debug message to show EVENT CODE */
+        u8LastState = G_au8AntApiCurrentMessageBytes[ANT_TICK_MSG_EVENT_CODE_INDEX];
+        au8TickMessage[6] = HexToASCIICharUpper(u8LastState);
+        DebugPrintf(au8TickMessage);
+
+        /* Parse u8LastState to update LED status */
+        switch (u8LastState)
+        {
+          /* Handle "good response" code that can appear when other ANT commands are sent */
+          case RESPONSE_NO_ERROR:
+          {
+            /* Don't do anything here for now */
+            break;
+          }
+
+          /* If we are paired but missing messages, blue blinks */
+          case EVENT_RX_FAIL:
+          {
+            LedOff(GREEN);
+            LedBlink(BLUE, LED_2HZ);
+            break;
+          }
+
+          /* If we drop to search, LED is green */
+          case EVENT_RX_FAIL_GO_TO_SEARCH:
+          {
+            LedOff(BLUE);
+            LedOn(GREEN);
+            break;
+          }
+
+          /* If the search times out, the channel should automatically close */
+          case EVENT_RX_SEARCH_TIMEOUT:
+          {
+            DebugPrintf("Search timeout\r\n");
+            break;
+          }
+
+          default:
+          {
+            DebugPrintf("Unexpected Event\r\n");
+            break;
+          }
+        } /* end switch (G_au8AntApiCurrentData) */
+      } /* end if (u8LastState ...) */
       
     } /* end ANT_TICK */
+    
   } /* end AntReadAppMessageBuffer() */
     
 } /* end UserApp1SM_ChannelOpen() */
 
 
 /*-------------------------------------------------------------------------------------------------------------------*/
-/* What does this state do? */
-static void UserApp1SM_Idle(void)
+/* Wait for channel to close.  LED status: green blink 2Hz */
+static void UserApp1SM_WaitChannelClose(void)
 {
-  u8 u8CurrentEventCodeExample = RESPONSE_NO_ERROR;
-  
-  if( AntReadAppMessageBuffer() )
+  /* Wait for the channel status to update */
+  if(AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_CLOSED)
   {
-    /* A new message! Check if Data or Tick */
-    if(G_eAntApiCurrentMessageClass == ANT_TICK)
-    {
-      /* Check the event code */
-      u8CurrentEventCodeExample = G_au8AntApiCurrentMessageBytes[ANT_TICK_MSG_EVENT_CODE_INDEX];
-    }
-    else if(G_eAntApiCurrentMessageClass == ANT_DATA)
-    {
-      /* Process data */
-    }
+    LedOff(GREEN);
+    LedOn(YELLOW);
+
+    UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
-} /* end UserApp1SM_Idle() */
-     
+  
+  /* Check for timeout */
+  if( IsTimeUp(&UserApp1_u32Timeout, U32_TIMEOUT_CLOSE_CHANNEL) )
+  {
+    LedOff(GREEN);
+    LedBlink(RED, LED_4HZ);
+
+    UserApp1_pfStateMachine = UserApp1SM_Error;
+  }
+    
+} /* end UserApp1SM_WaitChannelClose() */
+
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
