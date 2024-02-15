@@ -193,7 +193,7 @@ Constants / Definitions
 /* #### end of default channel configuration parameters ####*/
 
 #define ANT_ACTIVITY_TIME_COUNT   (u32)10000    /* Value used in a while loop that is waiting for an activity to be completed */
-#define ANT_SRDY_DELAY            (u32)200      /* A loop-kill delay to provide guaranteed minimum space for SRDY messages */
+#define ANT_SRDY_DELAY            (u32)300      /* A loop-kill delay to provide guaranteed minimum space for SRDY messages */
 #define ANT_SRDY_PERIOD           (u32)20       /* A loop-kill delay to stretch the SRDY pulse out */
 
 

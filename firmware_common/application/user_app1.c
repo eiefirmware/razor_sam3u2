@@ -19,7 +19,7 @@ To start a new task using this user_app1 as a template:
 
 ------------------------------------------------------------------------------------------------------------------------
 GLOBALS
-- NONE
+- extern from ant_api.c
 
 CONSTANTS
 - NONE
@@ -46,6 +46,14 @@ All Global variable names shall start with "G_<type>UserApp1"
 /* New variables */
 volatile u32 G_u32UserApp1Flags;                          /*!< @brief Global state flags */
 
+// Globals for passing data from the ANT application to the API
+extern u32 G_u32AntApiCurrentMessageTimeStamp;                            // From ant_api.c
+
+extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // From ant_api.c
+
+extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
+
+extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
@@ -90,12 +98,42 @@ Promises:
 - NONE
 
 */
+
+static void UserApp1SM_WaitAntReady(void);
+static void UserApp1SM_WaitChannelOpen(void);
+static void UserApp1SM_ChannelOpen(void);
+
 void UserApp1Initialize(void)
 {
+  AntAssignChannelInfoType sChannelInfo;
+
+  if(AntRadioStatusChannel(ANT_CHANNEL_0) == ANT_UNCONFIGURED)
+  {
+    sChannelInfo.AntChannel = U8_ANT_CHANNEL_USERAPP;
+    sChannelInfo.AntChannelType = CHANNEL_TYPE_MASTER;
+    sChannelInfo.AntChannelPeriodHi = U8_ANT_CHANNEL_PERIOD_HI_USERAPP;
+    sChannelInfo.AntChannelPeriodLo = U8_ANT_CHANNEL_PERIOD_LO_USERAPP;
+    
+    sChannelInfo.AntDeviceIdHi = U8_ANT_DEVICE_HI_USERAPP;
+    sChannelInfo.AntDeviceIdLo = U8_ANT_DEVICE_LO_USERAPP;
+    sChannelInfo.AntDeviceType = U8_ANT_DEVICE_TYPE_USERAPP;
+    sChannelInfo.AntTransmissionType = U8_ANT_TRANSMISSION_TYPE_USERAPP;
+    
+    sChannelInfo.AntFrequency = U8_ANT_FREQUENCY_USERAPP;
+    sChannelInfo.AntTxPower = U8_ANT_TX_POWER_USERAPP;
+    
+    sChannelInfo.AntNetwork = ANT_NETWORK_DEFAULT;      
+    for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++)
+    {
+      sChannelInfo.AntNetworkKey[i] = ANT_DEFAULT_NETWORK_KEY;
+    }
+    
+    AntAssignChannel(&sChannelInfo);
+  }
   /* If good initialization, set state to Idle */
   if( 1 )
   {
-    UserApp1_pfStateMachine = UserApp1SM_Idle;
+    UserApp1_pfStateMachine = UserApp1SM_WaitAntReady;
   }
   else
   {
@@ -137,6 +175,99 @@ void UserApp1RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------*/
+/* Wait for Ant Channel to be configured */
+static void UserApp1SM_WaitAntReady(void){
+  
+  if(AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_CONFIGURED){
+  
+    if(AntOpenChannelNumber(U8_ANT_CHANNEL_USERAPP)){
+      UserApp1_pfStateMachine = UserApp1SM_WaitChannelOpen;
+    }
+    else{
+      UserApp1_pfStateMachine = UserApp1SM_Error;
+    }
+    
+  
+  }
+
+
+}// End of UserApp1SM_waitAntReady()
+
+/* Wait for Channel to open*/
+static void UserApp1SM_WaitChannelOpen(void){
+  if(AntRadioStatusChannel(U8_ANT_CHANNEL_USERAPP) == ANT_OPEN){
+    UserApp1_pfStateMachine = UserApp1SM_ChannelOpen;
+  }
+
+
+
+} // end of UserApp1SM_WaitChannelOpen()
+
+static void UserApp1SM_ChannelOpen(void){
+  static u8 au8TestMessage[] = {0, 0, 0, 0, 0xA5, 0, 0, 0};
+  static u8 intermediate = 0;
+  u8 au8DataContent[8] = {0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48}; //, 0x49, 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56};
+  if(AntReadAppMessageBuffer()){
+    
+    if(G_eAntApiCurrentMessageClass == ANT_DATA){
+      // We got some data
+      for(int i = 0; i < ANT_DATA_BYTES; i += 2){
+        intermediate = G_au8AntApiCurrentMessageBytes[i];
+        intermediate += G_au8AntApiCurrentMessageBytes[i + 1] << 4;
+        au8DataContent[i] = intermediate;
+      }
+      
+      LcdMessage(LINE2_START_ADDR, au8DataContent);
+      
+    }
+    else if(G_eAntApiCurrentMessageClass == ANT_TICK){
+
+      
+      
+      au8TestMessage[7]++;
+      
+      if(au8TestMessage[7] == 0){
+        au8TestMessage[6]++;
+        if(au8TestMessage[6] == 0){
+          au8TestMessage[5]++;
+        }
+      }
+      
+      au8TestMessage[0] = 0x00;
+      au8TestMessage[1] = 0x00;
+      au8TestMessage[2] = 0x00;
+      au8TestMessage[3] = 0x00;
+      
+      if( IsButtonPressed(BUTTON0)){
+        au8TestMessage[0] = 0xff;
+      }
+      if( IsButtonPressed(BUTTON1)){
+        au8TestMessage[1] = 0xff;
+      }
+      if( IsButtonPressed(BUTTON2)){
+        au8TestMessage[2] = 0xff;
+      }
+      if( IsButtonPressed(BUTTON3)){
+        au8TestMessage[3] = 0xff;
+      }
+      
+      
+      
+      AntQueueBroadcastMessage(U8_ANT_CHANNEL_USERAPP, au8TestMessage);
+      
+      // A channel period has gone by
+    }
+    
+    
+    
+    
+  
+  }
+
+
+
+
+}
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
