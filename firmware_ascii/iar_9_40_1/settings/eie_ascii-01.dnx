@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>2046761099</Checksum>
+        <Checksum>3833272895</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -90,6 +90,10 @@
         <FirstRun>0</FirstRun>
         <MemConfigValue>D:\IAR\EWARM_9_40_1\arm\config\debugger\Microchip\ATSAM3U2C.ddf</MemConfigValue>
     </PlDriver>
+    <ArmDriver>
+        <EnableCache>0</EnableCache>
+        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
+    </ArmDriver>
     <struct_types>
         <Fmt0>ButtonStatusType-u32DebounceTimeStart	3	0</Fmt0>
     </struct_types>
@@ -120,10 +124,6 @@
         <Graph>0</Graph>
         <Symbiont>0</Symbiont>
     </DriverProfiling>
-    <ArmDriver>
-        <EnableCache>0</EnableCache>
-        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
-    </ArmDriver>
     <DisassembleMode>
         <mode>0</mode>
     </DisassembleMode>

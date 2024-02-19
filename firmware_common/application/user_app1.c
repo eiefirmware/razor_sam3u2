@@ -59,8 +59,9 @@ extern volatile u32 G_u32ApplicationFlags;                /*!< @brief From main.
 Global variable definitions with scope limited to this local application.
 Variable names shall start with "UserApp1_<type>" and be declared as static.
 ***********************************************************************************************************************/
-static fnCode_type UserApp1_pfStateMachine;               /*!< @brief The state machine function pointer */
-//static u32 UserApp1_u32Timeout;                           /*!< @brief Timeout counter used across states */
+static fnCode_type UserApp1_pfStateMachine;                             /*!< @brief The state machine function pointer */
+
+static RGBValueType UserApp1_asLedMatrixColors[U8_TOTAL_MATRIX_LEDS];   /*!< @brief Storage for complete LED matrix refresh */
 
 
 /**********************************************************************************************************************
@@ -92,6 +93,23 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  /* Set up LCD display */
+  LcdCommand(LCD_CLEAR_CMD);
+  LcdMessage(LINE1_START_ADDR, "Addressable LEDs");
+  LcdMessage(LINE2_START_ADDR, "RED  GRN   BLU   RGB");
+  
+  /* Initialize storage array */
+  for(u8 i = 0; i < U8_TOTAL_MATRIX_LEDS; i++)
+  {
+    UserApp1_asLedMatrixColors[i].u8Red = 0;
+    UserApp1_asLedMatrixColors[i].u8Grn = 0;
+    UserApp1_asLedMatrixColors[i].u8Blu = 0;
+  }
+  
+  /* Ramp up all LEDs to white */
+  RefreshLedMatrix();
+  
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -131,6 +149,69 @@ void UserApp1RunActiveState(void)
 /*------------------------------------------------------------------------------------------------------------------*/
 /*! @privatesection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/
+
+/*!----------------------------------------------------------------------------------------------------------------------
+@fn void RefreshLedMatrix(void)
+
+@brief Sends all data in UserApp1_asLedMatrixColors to the LED matrix daughter board(s).
+This function is blocking and interrupts must be disabled during data transfer.
+Update time for a single daughter board is 480us, so 3 or more daughter boards will result
+in disturbing the 1ms system timing with every refresh.
+
+A "0" bit is a high signal for 300ns followed by a low signal for 900ns (with 150ns tolerance on each)
+A "1" bit is a high signal for 900ns followed by a low signal for 300ns (with 150ns tolerance on each)
+
+Each 24-bit value is transferred MSB first starting with red. Instruction cycles are detailed in 
+each section.  At 48MHz, 1 instruction cycle is 20.8ns; a bit period is 1.2us or 57.6 instruction cycles.
+
+Requires:
+- UserApp1_asLedMatrixColors is ready to be sent
+- UserApp1_asLedMatrixColors contents are sequential in memory
+- Interrupts can be disabled 
+- LED matrix output is pin AT91C_BASE_PIOA->PIO_SODR 
+
+Promises:
+- All bits in UserApp1_asLedMatrixColors are sequentially clocked out following the
+  single wire data transfer protocol for the B3DK3BRG LEDs.
+
+*/
+void RefreshLedMatrix(void)
+{
+  u8 u8BitMask = 0x80;        /* Start with MSB mask for a single bit */
+  u8 pu8BytePointer = &UserApp1_asLedMatrixColors.u8Red;    /* Starting address for access pointer */
+  
+  for(u16 i = 0; i < U16_TOTAL_LED_BYTES; i++)                  // x instruction cycles
+  {
+    if(u8BitMask & *pu8BytePointer)                              // x instruction cycles
+    {
+      AT91C_BASE_PIOA->PIO_SODR |= AT91C_BASE_PIOA->PIO_SODR;  // 3 instruction cycles
+      for(u8 j = 0; j < 10; j++);                              // j x 3 instruction cycles + x
+      AT91C_BASE_PIOA->PIO_CODR |= AT91C_BASE_PIOA->PIO_SODR;  // 3 instruction cycles
+      for(u8 j = 0; j < 3; j++);                               // j x 3 instruction cycles + x
+
+    }
+    else
+    {
+      AT91C_BASE_PIOA->PIO_SODR |= AT91C_BASE_PIOA->PIO_SODR;  // 3 instruction cycles
+      for(u8 j = 0; j < 3; j++);                               // j x 3 instruction cycles + x
+      AT91C_BASE_PIOA->PIO_CODR |= AT91C_BASE_PIOA->PIO_SODR;  // 3 instruction cycles
+      for(u8 j = 0; j < 10; j++);                              // j x 3 instruction cycles + x
+    }
+    
+    /* Shift mask and reset if necessary */
+    u8BitMask >>= u8BitMask;                                   // 1 instruction cycle
+    if(u8BitMask == 0)
+    {
+      u8BitMask = 0x80;                                        // 1 instruction cycle
+    }
+    else
+    {
+      asm(nop);                                                // 1 instruction cycle
+    }
+  }
+  
+
+} /* end RefreshLedMatrix */
 
 
 /**********************************************************************************************************************
