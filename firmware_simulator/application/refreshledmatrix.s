@@ -4,13 +4,14 @@
 
 	PUBLIC	RefreshLedMatrix
 
+
 ;-----------------------------------------------------------------------------
 ; RefreshLedMatrix(unsigned long int *u32Address, unsigned long int u32Bytes)
 ; 
 ; The processor is fully awake during this time and simply kills instructions
 ; by running through a loop.  
-; To be compatible with C code, the function parameter must use r0 as, by 
-; convention, that's where the compiler would put it.
+; To be compatible with C code, the function input parameters must use r0 and r1 as 
+; convention, that's where the compiler will put them.
 ; All timing is shown in [ ].  The function overhead is subtracted off the value passed
 ; in, then the value is reduced by the number of cycles it takes for each run of the kill_x_loop
 ; There will be a remainder error here, but it's at most 2 cycles.
@@ -32,56 +33,72 @@
 ; - If u32Bytes > 120, this will start violating 1ms timing (480us per 60 bytes)
 
 
-#define OVERHEAD  7                 
-#define OUTPUT_PIN 0x00000008       
-#define SODR_CODR_OFFSET  (AT91C_PIOB_CODR - AT91C_PIOB_SODR)
+#define OVERHEAD            7                 
+#define OUTPUT_PIN          0x00000008
+#define AT91C_PIOB_SODR     0x400E0E30
+#define AT91C_PIOB_CODR     0x400E0E34
+#define SODR_CODR_OFFSET    (AT91C_PIOB_CODR - AT91C_PIOB_SODR)
 
 RefreshLedMatrix				            ; Function entry
-  LDR   r2, =AT91C_PIOB_SODR        ; Load r2 with the address of SODR
-  LDR   r5, OUTPUT_PIN             ; r5 to hold the pin number for writes to SODR/CODR
-  CPSID i                           ; Disable interrupts
+  LDR   r2, =AT91C_PIOB_SODR        ; 59: Load r2 with the address of SODR
+  LDR   r5, =OUTPUT_PIN             ; r5 to hold the pin number for writes to SODR/CODR
+  CPSID i                           ; 62: Disable interrupts
 
 ByteLoopInit                         ; Get current byte ready
-  CBZ   r1, RefreshDone              ; Check if u32Bytes is 0
-  SUB   r1, r1, #1                   ; Decrement byte counter
-  MOV   r3, #8                       ; r3 will count shifts
-  LDRB  r4, [r0]                     ; r4 = *r0 (get current byte to send)
-  ADD   r0, r0, #1                   ; Advance r0 to next byte address
-  LSL   r4, r4, #24                  ; Setup MSB to bit 32
+  CBZ   r1, RefreshDone              ; 64, 529: Check if u32Bytes is 0 [1 cycle]
+  SUB   r1, r1, #1                   ; 65: Decrement byte counter [1]
+  MOV   r3, #8                       ; 66: r3 will count shifts [1]
+  LDRB  r4, [r0]                     ; 67: r4 = *r0 (get current byte to send) [2]
+  ADD   r0, r0, #1                   ; 69, 534: Advance r0 to next byte address [1]
+  LSL   r4, r4, #24                  ; 70, 535: Setup MSB to bit 32 [1]
  
 ByteLoop
-  LSLS  r4, r4, #1                   ; Shift first bit out to carry
-  STR   r5, [r2]                     ; x cycles to here; write SODR regardless
-  BLO   ZERO_BIT                     ; Branch if C = 0
+  LSLS  r4, r4, #1                   ; 130, 536; Shift first bit out to carry [1]
+  STR   r5, [r2]                     ; 72, 130, 188, 246, 304, 362, 420, 478, 537, 595, ..., 943, 1002 [1] - write SODR regardless
+  BHI   ONE_BIT                      ; 73, 131: Branch if C = 1 [1 no branch, 4 if branch]
+
+
+ZERO_BIT                             ; 14 cycles high, 44 cycles low
+  MOV   r6, #2                       ; 132: Load r6 loop counter to kill cycles [1]
+
+ZeroBitShortLoop
+  SUBS  r6, r6, #1                   ; : Decrement r6, update flags
+  BPL   ZeroBitShortLoop             ; : Loop if not zero
+
+  STR   r5, [r2, #SODR_CODR_OFFSET]  ; 145, 203, 377 [1]: write CODR 
+  MOV   r6, #4                       ; 146 [1]: Load r6 loop counter to kill cycles
+
+ZeroBitLongLoop
+  SUBS  r6, r6, #1                   ; 147 [1]: Decrement r6, update flags
+  BPL   ZeroBitLongLoop              ; Loop if not zero
+  NOP                                ;
+  NOP                                ;
+  NOP                                ;
+  B     ByteLoopEnd                  ; 169 [4] exit out to next bit or byte
+
 
 ONE_BIT                              ; 44 cycles high, 14 cycles low
-  MOV   r6, #10                      ; Load r6 loop counter to kill cycles
+  MOV   r6, #7                       ; 77 [1]: Load r6 loop counter to kill cycles
 OneBitLoop
-  SUBS  r6, r6, #1                   ; Decrement r6, update flags
-  BPL   OneBitLoop                   ; Loop if not zero
-  STR   r5, [r2, #SODR_CODR_OFFSET]  ; x cycles to here; write CODR 
+  SUBS  r6, r6, #1                   ; : Decrement r6, update flags
+  BPL   OneBitLoop                   ; : Loop if not zero
+  NOP                                ; 
+  STR   r5, [r2, #SODR_CODR_OFFSET]  ; 116, 290, 348 [1]: write CODR
                                      ; Proceed to ByteLoopEnd
 
 ByteLoopEnd                          ; From here it is either x cyles until next bit; or y cycles for start of new byte
-  SUB   r3, #1                       ; Decrement byte counter
-  CBZ   r3, ByteLoopInit             ; If bit counter is 0, time for new byte
-                                     ; Kill a few more cycles
-  B     ByteLoop                     ;
+  SUB   r3, #1                       ; 117, 172, 523: Decrement bit counter [1]
+  CMP   r3, #0                       ; 173, 524: [1]
+  BEQ   ByteLoopInit                 ; 525: If bit counter is 0, time for new byte
+                                     ; Kill a few more cycles to balance ByteLoopInit instruction cycles
+  NOP                                ;
+  NOP                                ;
+  NOP                                ;
+  NOP                                ;
+  NOP                                ;
+  NOP                                ;
+  B     ByteLoop                     ; 
 
-ZERO_BIT                             ; 14 cycles high, 44 cycles low
-  MOV   r6, #3                       ; Load r6 loop counter to kill cycles
-
-ZeroBitShortLoop
-  SUBS  r6, r6, #1                   ; Decrement r6, update flags
-  BPL   ZeroBitShortLoop             ; Loop if not zero
-
-  STR   r5, [r2, #SODR_CODR_OFFSET]  ; x cycles to here; write CODR 
-  MOV   r6, #10                      ; Load r6 loop counter to kill cycles
-
-ZeroBitLongLoop
-  SUBS  r6, r6, #1                   ; Decrement r6, update flags
-  BPL   ZeroBitLongLoop              ; Loop if not zero
-  B     ByteLoopEnd                  ; x cycles to here, exit out to next bit or byte
 
 
 RefreshDone

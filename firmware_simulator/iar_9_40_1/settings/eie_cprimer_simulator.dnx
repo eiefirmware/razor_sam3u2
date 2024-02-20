@@ -16,7 +16,7 @@
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>467801085</Checksum>
+        <Checksum>1779905074</Checksum>
     </DebugChecksum>
     <Disassembly>
         <MixedMode>1</MixedMode>
@@ -35,6 +35,10 @@
     <watch_formats>
         <Fmt0>{W}1:u8CurrentServer	3	0</Fmt0>
     </watch_formats>
+    <Registers>
+        <regBase0>R1 10</regBase0>
+        <regBase1>R6 10</regBase1>
+    </Registers>
     <DriverProfiling>
         <Enabled>0</Enabled>
         <Mode>1</Mode>
@@ -67,7 +71,8 @@
         <Bp0>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.216.7" 0 0 1 "" 0 ""</Bp0>
         <Bp1>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.92.7" 0 0 1 "" 0 ""</Bp1>
         <Bp2>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.141.7" 0 0 1 "" 0 ""</Bp2>
-        <Count>3</Count>
+        <Bp3>_ 1 "STD_CODE2" "{$PROJ_DIR$\..\application\refreshledmatrix.s}.105.1" 0 0 1 "" 0 ""</Bp3>
+        <Count>4</Count>
     </Breakpoints2>
     <Interrupts>
         <Enabled>1</Enabled>
