@@ -16,7 +16,7 @@
         <ShowSource>1</ShowSource>
     </Trace1>
     <DebugChecksum>
-        <Checksum>195367371</Checksum>
+        <Checksum>467801085</Checksum>
     </DebugChecksum>
     <Disassembly>
         <MixedMode>1</MixedMode>
@@ -29,9 +29,6 @@
     <CallStack>
         <ShowArgs>0</ShowArgs>
     </CallStack>
-    <struct_types>
-        <Fmt0>ServerType-u8ServerNumber	3	0</Fmt0>
-    </struct_types>
     <array_types>
         <Fmt0>u32[5]	3	0</Fmt0>
     </array_types>
@@ -67,10 +64,11 @@
         <mode>0</mode>
     </DisassembleMode>
     <Breakpoints2>
-        <Bp0>_ 1 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.216.7" 0 0 1 "" 0 ""</Bp0>
-        <Bp1>_ 1 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.92.7" 0 0 1 "" 0 ""</Bp1>
-        <Bp2>_ 1 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.141.7" 0 0 1 "" 0 ""</Bp2>
-        <Count>3</Count>
+        <Bp0>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.216.7" 0 0 1 "" 0 ""</Bp0>
+        <Bp1>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.92.7" 0 0 1 "" 0 ""</Bp1>
+        <Bp2>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.141.7" 0 0 1 "" 0 ""</Bp2>
+        <Bp3>_ 1 "STD_CODE2" "{$PROJ_DIR$\..\application\main.c}.51.11" 0 0 1 "" 0 ""</Bp3>
+        <Count>4</Count>
     </Breakpoints2>
     <Interrupts>
         <Enabled>1</Enabled>
