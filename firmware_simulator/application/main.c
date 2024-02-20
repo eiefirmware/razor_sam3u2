@@ -26,6 +26,7 @@ Variable names shall start with "Main_" and be declared as static.
 /***********************************************************************************************************************
 Main Program
 ***********************************************************************************************************************/
+extern RefreshLedMatrix(u32 u32Address, u32 u32Bytes);
 
 void main(void)
 {
@@ -47,7 +48,10 @@ void main(void)
   asLedMatrixColors[1].u8Red = 0x9a;
   asLedMatrixColors[1].u8Grn = 0x9a;
   asLedMatrixColors[1].u8Blu = 0x9a;
+
+  RefreshLedMatrix(asLedMatrixColors, 60);
   
+#if 0  
   for(u16 i = 0; i < 60; i++)                                  // 54, 114: 5 instruction cycles
   {
     if(u8BitMask & *pu8BytePointer)                            // 59, 122: 4 instruction cycles
@@ -102,7 +106,8 @@ void main(void)
     
     /* Shift mask and reset/move pointer if necessary */
   }
-
+#endif
+  
   while(1)
   {
     
