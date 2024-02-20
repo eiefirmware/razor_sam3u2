@@ -2879,6 +2879,9 @@
             <file>
                 <name>$PROJ_DIR$\..\drivers\exceptions.c</name>
             </file>
+            <file>
+                <name>$PROJ_DIR$\..\application\refreshledmatrix.s</name>
+            </file>
         </group>
     </group>
     <group>

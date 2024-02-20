@@ -67,8 +67,7 @@
         <Bp0>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.216.7" 0 0 1 "" 0 ""</Bp0>
         <Bp1>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.92.7" 0 0 1 "" 0 ""</Bp1>
         <Bp2>_ 0 "STD_CODE2" "{$PROJ_DIR$\..\application\main_solution.c}.141.7" 0 0 1 "" 0 ""</Bp2>
-        <Bp3>_ 1 "STD_CODE2" "{$PROJ_DIR$\..\application\main.c}.51.11" 0 0 1 "" 0 ""</Bp3>
-        <Count>4</Count>
+        <Count>3</Count>
     </Breakpoints2>
     <Interrupts>
         <Enabled>1</Enabled>

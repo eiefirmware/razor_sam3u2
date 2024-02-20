@@ -7,6 +7,8 @@ Container for the Cprimer "Server" application firmware.
 
 #include "configuration.h"
 
+extern void RefreshLedMatrix(u32 *u32Address, u32 u32Bytes);
+
 #ifndef SOLUTION
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -26,7 +28,6 @@ Variable names shall start with "Main_" and be declared as static.
 /***********************************************************************************************************************
 Main Program
 ***********************************************************************************************************************/
-extern RefreshLedMatrix(u32 u32Address, u32 u32Bytes);
 
 void main(void)
 {
@@ -49,7 +50,7 @@ void main(void)
   asLedMatrixColors[1].u8Grn = 0x9a;
   asLedMatrixColors[1].u8Blu = 0x9a;
 
-  RefreshLedMatrix(asLedMatrixColors, 60);
+  RefreshLedMatrix((u32*)asLedMatrixColors, 60);
   
 #if 0  
   for(u16 i = 0; i < 60; i++)                                  // 54, 114: 5 instruction cycles

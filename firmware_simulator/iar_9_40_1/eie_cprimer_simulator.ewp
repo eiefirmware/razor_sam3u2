@@ -689,7 +689,7 @@
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>224</hasPrio>
+                <hasPrio>1</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
             </data>
         </settings>
@@ -2205,6 +2205,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\drivers\exceptions.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\application\refreshledmatrix.s</name>
             </file>
         </group>
     </group>

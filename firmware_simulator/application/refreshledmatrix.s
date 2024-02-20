@@ -1,5 +1,11 @@
+  MODULE  RefreshLedMatrix
+  SECTION .text : CODE : NOROOT(2)
+  THUMB
+
+	PUBLIC	RefreshLedMatrix
+
 ;-----------------------------------------------------------------------------
-; RefreshLedMatrix(unsigned long int u32Address, unsigned long int u32Bytes)
+; RefreshLedMatrix(unsigned long int *u32Address, unsigned long int u32Bytes)
 ; 
 ; The processor is fully awake during this time and simply kills instructions
 ; by running through a loop.  
@@ -26,13 +32,13 @@
 ; - If u32Bytes > 120, this will start violating 1ms timing (480us per 60 bytes)
 
 
-#define OVERHEAD  7
-#define OUTPUT_PIN 0x00000008
+#define OVERHEAD  7                 
+#define OUTPUT_PIN 0x00000008       
 #define SODR_CODR_OFFSET  (AT91C_PIOB_CODR - AT91C_PIOB_SODR)
 
 RefreshLedMatrix				            ; Function entry
   LDR   r2, =AT91C_PIOB_SODR        ; Load r2 with the address of SODR
-  LDR   r5, #OUTPUT_PIN             ; r5 to hold the pin number for writes to SODR/CODR
+  LDR   r5, OUTPUT_PIN             ; r5 to hold the pin number for writes to SODR/CODR
   CPSID i                           ; Disable interrupts
 
 ByteLoopInit                         ; Get current byte ready
@@ -82,25 +88,4 @@ RefreshDone
   CPSIE i                             ; Re-enable interrupts
   MOV	  PC, r14			                  ; [1] Move the return address back to the PC
   
-END
-
-
-
-kill_x_loop				; [3 cycle loop]
-SUBS	r0, r0, #3		; [1] Subtract the loop cycle cost from the counter
-BPL	kill_x_loop		; [2] Check if positive or zero and repeat if so
-
-kill_x_cycles_end			;
-
-
-; Loop of u32Bytes
-; Point to current byte
-; Load byte to working register shifting by 24 to get 8 bits in MSB
-; loop 8 times:
-;  shift once
-;  respond to carry by branch to 0 loop or 1 loop
-;  set SODR
-;  kill x cycles
-;  set CODR
-;  kill y cycles
-;  update counter; if 0, check if done; if not, load new byte
+  END
