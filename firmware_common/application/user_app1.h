@@ -26,8 +26,8 @@ Type Definitions
 @brief Data struct to hold 24-bit RGB color data */
 typedef struct 
 {
-  u8 u8Red;                         /*!< @brief 8-bit RED value */
   u8 u8Grn;                         /*!< @brief 8-bit GREEN value */
+  u8 u8Red;                         /*!< @brief 8-bit RED value */
   u8 u8Blu;                         /*!< @brief 8-bit BLUE value */
 } RGBValueType;
 
@@ -67,7 +67,7 @@ Constants / Definitions
 #define U8_LEDS_PER_MATRIX        (u8)20         /*!< @brief Number of LEDs in the daughter board matrix */
 #define U8_NUM_MATRICES           (u8)1          /*!< @brief Number of LED daughter boards matrices attached */
 #define U8_TOTAL_MATRIX_LEDS      (u8)(U8_LEDS_PER_MATRIX * U8_NUM_MATRICES)
-#define U16_TOTAL_LED_BYTES       (u16)(U8_TOTAL_MATRIX_LEDS * 3)
+#define U32_TOTAL_LED_BYTES       (u32)(U8_TOTAL_MATRIX_LEDS * 3)
 
 #endif /* __USER_APP1_H */
 

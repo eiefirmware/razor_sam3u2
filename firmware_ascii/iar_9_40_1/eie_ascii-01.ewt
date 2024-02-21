@@ -3027,6 +3027,9 @@
                 <name>$PROJ_DIR$\..\..\firmware_common\application\main.c</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\refreshledmatrix.s</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\user_app1.c</name>
             </file>
             <file>

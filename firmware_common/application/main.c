@@ -7,6 +7,7 @@
 
 extern	void kill_x_cycles(u32);
 
+
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
 All Global variable names shall start with "G_"

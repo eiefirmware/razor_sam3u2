@@ -39,6 +39,9 @@ PROTECTED FUNCTIONS
 
 #include "configuration.h"
 
+extern void RefreshLedMatrix(u8* pu8Address_, u32 u32Bytes_);
+
+
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
 All Global variable names shall start with "G_<type>UserApp1"
@@ -93,21 +96,26 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  /* Reconfigure pin PB_03_BLADE_AN0 to be digital output */
+  AT91C_BASE_PIOB->PIO_PER = PB_03_BLADE_AN0;
+  AT91C_BASE_PIOB->PIO_CODR = PB_03_BLADE_AN0;
+  AT91C_BASE_PIOB->PIO_OER = PB_03_BLADE_AN0; 
+  
   /* Set up LCD display */
   LcdCommand(LCD_CLEAR_CMD);
   LcdMessage(LINE1_START_ADDR, "Addressable LEDs");
-  LcdMessage(LINE2_START_ADDR, "RED  GRN   BLU   RGB");
+  LcdMessage(LINE2_START_ADDR, "RED  GRN   BLU   WHT");
   
-  /* Initialize storage array */
+  /* Initialize storage array for PURPLE LEDs */
   for(u8 i = 0; i < U8_TOTAL_MATRIX_LEDS; i++)
   {
-    UserApp1_asLedMatrixColors[i].u8Red = 0;
     UserApp1_asLedMatrixColors[i].u8Grn = 0;
-    UserApp1_asLedMatrixColors[i].u8Blu = 0;
+    UserApp1_asLedMatrixColors[i].u8Red = 100;
+    UserApp1_asLedMatrixColors[i].u8Blu = 100;
   }
   
   /* Ramp up all LEDs to white */
-  RefreshLedMatrix();
+  RefreshLedMatrix(&UserApp1_asLedMatrixColors[0].u8Grn, U32_TOTAL_LED_BYTES);
   
   
   /* If good initialization, set state to Idle */
@@ -150,6 +158,7 @@ void UserApp1RunActiveState(void)
 /*! @privatesection */                                                                                            
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+#if 0
 /*!----------------------------------------------------------------------------------------------------------------------
 @fn void RefreshLedMatrix(void)
 
@@ -212,7 +221,7 @@ void RefreshLedMatrix(void)
   
 
 } /* end RefreshLedMatrix */
-
+#endif
 
 /**********************************************************************************************************************
 State Machine Function Definitions
@@ -221,6 +230,73 @@ State Machine Function Definitions
 /* What does this state do? */
 static void UserApp1SM_Idle(void)
 {
+  bool bNewButton = FALSE;
+  
+  if(WasButtonPressed(BUTTON0))
+  {
+    /* Setup for RED LEDs */
+    for(u8 i = 0; i < U8_TOTAL_MATRIX_LEDS; i++)
+    {
+      UserApp1_asLedMatrixColors[i].u8Grn = 0;
+      UserApp1_asLedMatrixColors[i].u8Red = 100;
+      UserApp1_asLedMatrixColors[i].u8Blu = 0;
+    }
+    
+    /* Ack the button press and flag a button press occurred */
+    ButtonAcknowledge(BUTTON0);
+    bNewButton = TRUE;
+  }
+  
+  if(WasButtonPressed(BUTTON1))
+  {
+    /* Setup for GREEN LEDs */
+    for(u8 i = 0; i < U8_TOTAL_MATRIX_LEDS; i++)
+    {
+      UserApp1_asLedMatrixColors[i].u8Grn = 100;
+      UserApp1_asLedMatrixColors[i].u8Red = 0;
+      UserApp1_asLedMatrixColors[i].u8Blu = 0;
+    }
+    
+    /* Ack the button press and flag a button press occurred */
+    ButtonAcknowledge(BUTTON1);
+    bNewButton = TRUE;
+  }
+
+  if(WasButtonPressed(BUTTON2))
+  {
+    /* Setup for BLUE LEDs */
+    for(u8 i = 0; i < U8_TOTAL_MATRIX_LEDS; i++)
+    {
+      UserApp1_asLedMatrixColors[i].u8Grn = 0;
+      UserApp1_asLedMatrixColors[i].u8Red = 0;
+      UserApp1_asLedMatrixColors[i].u8Blu = 100;
+    }
+    
+    /* Ack the button press and flag a button press occurred */
+    ButtonAcknowledge(BUTTON2);
+    bNewButton = TRUE;
+  }
+
+  if(WasButtonPressed(BUTTON3))
+  {
+    /* Setup for White LEDs */
+    for(u8 i = 0; i < U8_TOTAL_MATRIX_LEDS; i++)
+    {
+      UserApp1_asLedMatrixColors[i].u8Grn = 100;
+      UserApp1_asLedMatrixColors[i].u8Red = 100;
+      UserApp1_asLedMatrixColors[i].u8Blu = 100;
+    }
+    
+    /* Ack the button press and flag a button press occurred */
+    ButtonAcknowledge(BUTTON3);
+    bNewButton = TRUE;
+  }
+  
+  if(bNewButton)
+  {
+    RefreshLedMatrix(&UserApp1_asLedMatrixColors[0].u8Grn, U32_TOTAL_LED_BYTES);
+  }
+  
     
 } /* end UserApp1SM_Idle() */
      

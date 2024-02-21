@@ -130,7 +130,7 @@ void ClockSetup(void)
   /* Activate the peripheral clocks needed for the system */
   AT91C_BASE_PMC->PMC_PCER = PMC_PCER_INIT;
 
-  /* Enable the master clock on the PKC0 clock out pin (PA_27_CLOCK_OUT) */
+  /* Enable the master clock on the PCK0 clock out pin (PA_27_CLOCK_OUT) */
   AT91C_BASE_PMC->PMC_PCKR[0] = AT91C_PMC_CSS_SYS_CLK | AT91C_PMC_PRES_CLK;
   AT91C_BASE_PMC->PMC_SCER = AT91C_PMC_PCK0;
 

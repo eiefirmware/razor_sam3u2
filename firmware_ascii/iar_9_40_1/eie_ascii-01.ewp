@@ -94,7 +94,7 @@
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
-                    <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+                    <state>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</state>
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
@@ -2358,6 +2358,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\main.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\refreshledmatrix.s</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\user_app1.c</name>
