@@ -92,7 +92,7 @@ Includes
 
 /* Common Blade header files */
 #include "blade_api.h"
-#include "blade_imu_lsm9ds1.h"
+#include "blade_imu_lsm6dsl.h"
 
 /* Common application header files */
 #include "debug.h"

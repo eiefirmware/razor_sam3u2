@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<settings>
+    <PlDriver>
+        <FirstRun>0</FirstRun>
+        <MemConfigValue>D:\IAR\EWARM_9_40_1\arm\config\debugger\Microchip\ATSAM3U2C.ddf</MemConfigValue>
+    </PlDriver>
+    <DebugChecksum>
+        <Checksum>3853820201</Checksum>
+    </DebugChecksum>
+    <Exceptions>
+        <StopOnUncaught>_ 0</StopOnUncaught>
+        <StopOnThrow>_ 0</StopOnThrow>
+    </Exceptions>
+    <Disassembly>
+        <MixedMode>1</MixedMode>
+        <InstrCount>0</InstrCount>
+    </Disassembly>
+    <Trace1>
+        <Enabled>0</Enabled>
+        <ShowSource>1</ShowSource>
+    </Trace1>
+    <Stack>
+        <FillEnabled>0</FillEnabled>
+        <OverflowWarningsEnabled>1</OverflowWarningsEnabled>
+        <WarningThreshold>90</WarningThreshold>
+        <SpWarningsEnabled>1</SpWarningsEnabled>
+        <WarnLogOnly>1</WarnLogOnly>
+        <UseTrigger>1</UseTrigger>
+        <TriggerName>main</TriggerName>
+        <LimitSize>0</LimitSize>
+        <ByteLimit>50</ByteLimit>
+    </Stack>
+    <CallStack>
+        <ShowArgs>0</ShowArgs>
+    </CallStack>
+    <JLinkDriver>
+        <jlinkResetStyle>12</jlinkResetStyle>
+        <jlinkResetStrategy>0</jlinkResetStrategy>
+        <TraceBufferSize>0x10000</TraceBufferSize>
+        <TraceStallIfFIFOFull>0x0</TraceStallIfFIFOFull>
+        <TracePortSize>0x0</TracePortSize>
+        <LeaveTargetRunning>_ 0</LeaveTargetRunning>
+        <CStepIntDis>_ 0</CStepIntDis>
+    </JLinkDriver>
+    <ArmDriver>
+        <EnableCache>0</EnableCache>
+        <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
+    </ArmDriver>
+    <struct_types>
+        <Fmt0>TwiPeripheralType-u32PrivateFlags	4	0</Fmt0>
+        <Fmt1>lsm6dslDataType-u8AccelXH	4	0</Fmt1>
+        <Fmt2>lsm6dslDataType-u8AccelXL	4	0</Fmt2>
+        <Fmt3>lsm6dslDataType-u8AccelYH	4	0</Fmt3>
+        <Fmt4>lsm6dslDataType-u8AccelYL	4	0</Fmt4>
+        <Fmt5>lsm6dslDataType-u8AccelZH	4	0</Fmt5>
+        <Fmt6>lsm6dslDataType-u8AccelZL	4	0</Fmt6>
+        <Fmt7>lsm6dslDataType-u8GyroXH	4	0</Fmt7>
+        <Fmt8>lsm6dslDataType-u8GyroXL	4	0</Fmt8>
+        <Fmt9>lsm6dslDataType-u8GyroYH	4	0</Fmt9>
+        <Fmt10>lsm6dslDataType-u8GyroYL	4	0</Fmt10>
+        <Fmt11>lsm6dslDataType-u8GyroZH	4	0</Fmt11>
+        <Fmt12>lsm6dslDataType-u8GyroZL	4	0</Fmt12>
+        <Fmt13>lsm6dslDataType-u8TempH	4	0</Fmt13>
+        <Fmt14>lsm6dslDataType-u8TempL	4	0</Fmt14>
+    </struct_types>
+    <array_types>
+        <Fmt0>u8[44]	5	0</Fmt0>
+    </array_types>
+    <watch_formats>
+        <Fmt0>{W}2:TWI_u8MsgQueueCount	3	0</Fmt0>
+        <Fmt1>{W}2:u32Number	3	0</Fmt1>
+    </watch_formats>
+    <Trace2>
+        <Enabled>0</Enabled>
+        <ShowSource>0</ShowSource>
+    </Trace2>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
+    <DriverProfiling>
+        <Enabled>0</Enabled>
+        <Mode>1</Mode>
+        <Graph>0</Graph>
+        <Symbiont>0</Symbiont>
+    </DriverProfiling>
+    <DisassembleMode>
+        <mode>0</mode>
+    </DisassembleMode>
+    <Breakpoints2>
+        <Count>0</Count>
+    </Breakpoints2>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
+</settings>
