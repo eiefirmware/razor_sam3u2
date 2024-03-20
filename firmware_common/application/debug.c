@@ -170,6 +170,7 @@ Promises:
 */
 u32 DebugPrintf(u8* u8String_)
 {
+  volatile u8 i = 0;
   u8* pu8Parser = u8String_;
   u32 u32Size = 0;
   

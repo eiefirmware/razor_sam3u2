@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "D:\IAR\EWARM_9_40_1\common\bin\cspybat" -f "E:\Github\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.general.xcl" --backend -f "E:\Github\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.2\common\bin\cspybat" -f "C:\Users\marcu\Desktop\EIEIO\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.general.xcl" --backend -f "C:\Users\marcu\Desktop\EIEIO\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.driver.xcl" 
 }
 else
 {
-& "D:\IAR\EWARM_9_40_1\common\bin\cspybat" -f "E:\Github\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.general.xcl" --debug_file=$debugfile --backend -f "E:\Github\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.driver.xcl" 
+& "C:\Program Files\IAR Systems\Embedded Workbench 9.2\common\bin\cspybat" -f "C:\Users\marcu\Desktop\EIEIO\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\marcu\Desktop\EIEIO\razor_sam3u2\firmware_ascii\iar_9_40_1\settings\eie_ascii-01.Debug.driver.xcl" 
 }

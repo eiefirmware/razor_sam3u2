@@ -55,6 +55,24 @@ static void UserApp1SM_Error(void);
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
+#define U8_ANT_CHANNEL_USERAPP                  (u8)ANT_CHANNEL_0 /* Channel 0 – 7 */
+
+#define U8_ANT_DEVICE_LO_USERAPP                (u8)0x9B /* Low byte of two-byte Device # */
+
+#define U8_ANT_DEVICE_HI_USERAPP                (u8)0x17 /* High byte of two-byte Device # */
+
+#define U8_ANT_DEVICE_TYPE_USERAPP              (u8)1 /* 1 – 255 */
+
+#define U8_ANT_TRANSMISSION_TYPE_USERAPP        (u8)1 /* 1-127 (MSB is pairing bit) */
+
+#define U8_ANT_CHANNEL_PERIOD_LO_USERAPP        (u8)0x00 /* Low byte of two-byte channel period */
+
+#define U8_ANT_CHANNEL_PERIOD_HI_USERAPP        (u8)0x20 /* High byte of two-byte channel period */
+
+#define U8_ANT_FREQUENCY_USERAPP                (u8)50 /* 2400MHz + this number 0 – 99 */
+
+#define U8_ANT_TX_POWER_USERAPP RADIO_TX_POWER_4DBM /* RADIO_TX_POWER_xxx */
+
 
 
 #endif /* __USER_APP1_H */
