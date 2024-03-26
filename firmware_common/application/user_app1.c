@@ -34,7 +34,6 @@ PROTECTED FUNCTIONS
 - void UserApp1Initialize(void)
 - void UserApp1RunActiveState(void)
 
-
 **********************************************************************************************************************/
 
 #include "configuration.h"
@@ -218,7 +217,7 @@ static void UserApp1SM_Idle(void)
   }
 
 } /* end UserApp1SM_Idle() */
-     
+
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for channel to be open.  LED status: green blink 2Hz */
@@ -445,7 +444,7 @@ static void UserApp1SM_WaitChannelClose(void)
   }
     
 } /* end UserApp1SM_WaitChannelClose() */
-
+  
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */

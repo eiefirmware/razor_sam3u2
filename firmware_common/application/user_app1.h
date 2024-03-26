@@ -59,15 +59,15 @@ static void UserApp1SM_WaitChannelClose(void);
 Constants / Definitions
 **********************************************************************************************************************/
 /* Required constants for ANT channel configuration (Channel ID wildcards) */
-#define U8_ANT_CHANNEL_USERAPP            ANT_CHANNEL_0  /* Channel 0 – 7 */
-#define U8_ANT_DEVICE_LO_USERAPP          (u8)0x0 /* Low byte of two-byte Device # */ 
-#define U8_ANT_DEVICE_HI_USERAPP          (u8)0x0 /* High byte of two-byte Device # */ 
-#define U8_ANT_DEVICE_TYPE_USERAPP        (u8)0 /* 1 – 255 */ 
-#define U8_ANT_TRANSMISSION_TYPE_USERAPP  (u8)0 /* 1-127 (MSB is pairing bit) */  
-#define U8_ANT_CHANNEL_PERIOD_LO_USERAPP  (u8)0x00 /* Low byte of two-byte channel period */ 
-#define U8_ANT_CHANNEL_PERIOD_HI_USERAPP  (u8)0x20 /* High byte of two-byte channel period */
-#define U8_ANT_FREQUENCY_USERAPP          (u8)50 /* 2400MHz + this number 0 – 99 */ 
-#define U8_ANT_TX_POWER_USERAPP           RADIO_TX_POWER_4DBM /* RADIO_TX_POWER_xxx */
+#define U8_ANT_CHANNEL_USERAPP (u8)ANT_CHANNEL_0 /* Channel 0 – 7 */
+#define U8_ANT_DEVICE_LO_USERAPP (u8)(1234 & 0xFF) /* Low byte of two-byte Device # */
+#define U8_ANT_DEVICE_HI_USERAPP (u8)(1234 >> 8) /* High byte of two-byte Device # */
+#define U8_ANT_DEVICE_TYPE_USERAPP (u8)123 /* 1 – 255 */
+#define U8_ANT_TRANSMISSION_TYPE_USERAPP (u8)1 /* 1-127 (MSB is pairing bit) */
+#define U8_ANT_CHANNEL_PERIOD_LO_USERAPP (u8)(8134 & 0xFF) /* Low byte of two-byte channel period */
+#define U8_ANT_CHANNEL_PERIOD_HI_USERAPP (u8)(8134 >> 8) /* High byte of two-byte channel period */
+#define U8_ANT_FREQUENCY_USERAPP (u8)57 /* 2400MHz + this number 0 – 99 */
+#define U8_ANT_TX_POWER_USERAPP RADIO_TX_POWER_4DBM /* RADIO_TX_POWER_xxx */
 
 #define U32_TIMEOUT_OPEN_CHANNEL          (u32)2000 /* Allowed time in ms to open a channel */
 #define U32_TIMEOUT_CLOSE_CHANNEL         (u32)5000 /* Allowed time in ms to close a channel */
