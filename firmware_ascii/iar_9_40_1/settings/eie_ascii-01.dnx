@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>3226648721</Checksum>
+        <Checksum>3194672</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -29,13 +29,13 @@
         <InstrCount>0</InstrCount>
     </Disassembly>
     <JLinkDriver>
-        <TraceBufferSize>0x10000</TraceBufferSize>
-        <TraceStallIfFIFOFull>0x0</TraceStallIfFIFOFull>
-        <TracePortSize>0x0</TracePortSize>
         <LeaveTargetRunning>_ 0</LeaveTargetRunning>
         <CStepIntDis>_ 0</CStepIntDis>
         <jlinkResetStyle>12</jlinkResetStyle>
         <jlinkResetStrategy>0</jlinkResetStrategy>
+        <TraceBufferSize>0x10000</TraceBufferSize>
+        <TraceStallIfFIFOFull>0x0</TraceStallIfFIFOFull>
+        <TracePortSize>0x0</TracePortSize>
     </JLinkDriver>
     <SfrWindow>
         <Show>1 1</Show>
@@ -115,16 +115,6 @@
         <Enabled>0</Enabled>
         <ShowSource>0</ShowSource>
     </Trace2>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
-    <DriverProfiling>
-        <Enabled>0</Enabled>
-        <Mode>1</Mode>
-        <Graph>0</Graph>
-        <Symbiont>0</Symbiont>
-    </DriverProfiling>
     <DisassembleMode>
         <mode>0</mode>
     </DisassembleMode>
@@ -133,8 +123,18 @@
         <Bp1>_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\..\firmware_common\drivers\ant.c}.833.7" 0 0 1 "" 0 "" 0</Bp1>
         <Count>2</Count>
     </Breakpoints2>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
     <Aliases>
         <Count>0</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
+    <DriverProfiling>
+        <Enabled>0</Enabled>
+        <Mode>1</Mode>
+        <Graph>0</Graph>
+        <Symbiont>0</Symbiont>
+    </DriverProfiling>
 </settings>

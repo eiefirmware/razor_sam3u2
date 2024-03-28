@@ -37,6 +37,7 @@ PROTECTED FUNCTIONS
 **********************************************************************************************************************/
 
 #include "configuration.h"
+#include "string.h"
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -231,7 +232,7 @@ static void UserApp1SM_WaitChannelOpen(void)
   }
   
   /* Check for timeout */
-  if( IsTimeUp(&UserApp1_u32Timeout, U32_TIMEOUT_OPEN_CHANNEL) )
+  if( IsTimeUp(&UserApp1_u32Timeout, U32_TIMEOUT_OPEN_CHANNEL))
   {
     AntCloseChannelNumber(U8_ANT_CHANNEL_USERAPP);
     LedOff(GREEN);
@@ -309,10 +310,71 @@ static void UserApp1SM_ChannelOpen(void)
       
       if(bGotNewData)
       {
+        char weatherType[100];
         /* We got new data: show on LCD */
         LcdClearChars(LINE2_START_ADDR, 20); 
         LcdMessage(LINE2_START_ADDR, au8DataContent); 
-
+        int weather = G_au8AntApiCurrentMessageBytes[7];
+        LcdClearChars(LINE2_START_ADDR, 20);
+        switch(weather){
+        case 1:
+           strcpy(weatherType, "Clear Sky");
+           LcdClearChars(LINE2_START_ADDR, 20);
+           LcdMessage(LINE2_START_ADDR, weatherType);
+           break;
+        
+        case 2:
+          strcpy(weatherType, "Few Clouds");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        case 3:
+          strcpy(weatherType, "Scatterred Clouds");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        case 4:
+          strcpy(weatherType, "Broken Clouds");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+        
+          
+        case 5:
+          strcpy(weatherType, "Shower Rain");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        case 6:
+          strcpy(weatherType, "Rain");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        case 7:
+          strcpy(weatherType, "Thunderstorm");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        case 8:
+          strcpy(weatherType, "Snow");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        case 9:
+          strcpy(weatherType, "Mist");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        case 10:
+          strcpy(weatherType, "Clouds");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+          
+        default:
+          strcpy(weatherType, "Unknown weather");
+          LcdMessage(LINE2_START_ADDR, weatherType);
+          break;
+        }
+        
 
         /* Update our local message counter and send the message back */
         au8TestMessage[7]++;
