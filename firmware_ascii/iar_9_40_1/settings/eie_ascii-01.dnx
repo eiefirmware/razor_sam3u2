@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>3194672</Checksum>
+        <Checksum>84833028</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -94,10 +94,6 @@
         <EnableCache>0</EnableCache>
         <EnforceMemoryConfiguration>1</EnforceMemoryConfiguration>
     </ArmDriver>
-    <Registers>
-        <regBase0>R0 10</regBase0>
-        <regBase1>R11 10</regBase1>
-    </Registers>
     <struct_types>
         <Fmt0>AntAssignChannelInfoType-AntFlags	1	0</Fmt0>
         <Fmt1>ButtonStatusType-u32DebounceTimeStart	3	0</Fmt1>
@@ -111,6 +107,10 @@
         <Fmt5>{W}3:u32CurrentButtonLocation	4	0</Fmt5>
         <Fmt6>{W}3:u32GPIOInterruptSources	4	0</Fmt6>
     </watch_formats>
+    <Registers>
+        <regBase0>R0 10</regBase0>
+        <regBase1>R11 10</regBase1>
+    </Registers>
     <Trace2>
         <Enabled>0</Enabled>
         <ShowSource>0</ShowSource>

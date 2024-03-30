@@ -38,6 +38,9 @@ PROTECTED FUNCTIONS
 
 #include "configuration.h"
 #include "string.h"
+#include <stdlib.h>
+#include <stdio.h>
+
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -105,7 +108,7 @@ void UserApp1Initialize(void)
 
   /* Clear screen and place start messages */
   LcdCommand(LCD_CLEAR_CMD);
-  LcdMessage(LINE1_START_ADDR, "ANT SLAVE DEMO"); 
+  LcdMessage(LINE1_START_ADDR, "WEATHER STATUS"); 
   LcdMessage(LINE2_START_ADDR, "B0 toggles radio"); 
 
   /* Start with LED0 in RED state = channel is not configured */
@@ -239,9 +242,36 @@ static void UserApp1SM_WaitChannelOpen(void)
     LedOn(YELLOW);
     UserApp1_pfStateMachine = UserApp1SM_Idle;
   }
-    
+
 } /* end UserApp1SM_WaitChannelOpen() */
 
+
+static void intToString(int tempRaw, char tempOut[]) {
+    int i = 0;
+    int reversed = 0;
+
+    // 1. Reverse the integer
+    while (tempRaw != 0) {
+        int digit = tempRaw % 10;
+        reversed = reversed * 10 + digit;
+        tempRaw /= 10;
+    }
+
+    // 2. Convert digits to characters and build the string
+    while (reversed != 0) {
+        int digit = reversed % 10;
+        tempOut[i++] = digit + '0';
+        reversed /= 10;
+    }
+
+    // Add null terminator for a proper string
+    tempOut[i] = '\0';
+}
+
+typedef struct {
+  unsigned char ui;
+  char si;
+} Converter;
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* ANT channel open: process messages and update data */
@@ -316,62 +346,96 @@ static void UserApp1SM_ChannelOpen(void)
         LcdMessage(LINE2_START_ADDR, au8DataContent); 
         int weather = G_au8AntApiCurrentMessageBytes[7];
         LcdClearChars(LINE2_START_ADDR, 20);
+        // char tempOut[];
+        char tempOut[50];
+        memset(tempOut, 0, 49);
+        snprintf(tempOut, 49, "%d", (s8)G_au8AntApiCurrentMessageBytes[6]);
+        
+        
+        Converter converter;
+        converter.ui = G_au8AntApiCurrentMessageBytes[6];
+        
+        converter.si = G_au8AntApiCurrentMessageBytes[6];
+
+        // tempOut = &converter.si;
+        
         switch(weather){
         case 1:
            strcpy(weatherType, "Clear Sky");
            LcdClearChars(LINE2_START_ADDR, 20);
            LcdMessage(LINE2_START_ADDR, weatherType);
+           LcdMessage(LINE2_START_ADDR + 13, tempOut);
            break;
         
         case 2:
           strcpy(weatherType, "Few Clouds");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         case 3:
           strcpy(weatherType, "Scatterred Clouds");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         case 4:
           strcpy(weatherType, "Broken Clouds");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
         
           
         case 5:
           strcpy(weatherType, "Shower Rain");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         case 6:
           strcpy(weatherType, "Rain");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         case 7:
           strcpy(weatherType, "Thunderstorm");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         case 8:
           strcpy(weatherType, "Snow");
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         case 9:
           strcpy(weatherType, "Mist");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         case 10:
           strcpy(weatherType, "Clouds");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
           
         default:
+          
           strcpy(weatherType, "Unknown weather");
+          LcdClearChars(LINE2_START_ADDR, 20);
           LcdMessage(LINE2_START_ADDR, weatherType);
+          LcdMessage(LINE2_START_ADDR + 13, tempOut);
           break;
         }
         

@@ -54,14 +54,15 @@ static void UserApp1SM_WaitAntReady(void);
 static void UserApp1SM_WaitChannelOpen(void);
 static void UserApp1SM_ChannelOpen(void);
 static void UserApp1SM_WaitChannelClose(void);
+static void intToString(int tempRaw, char tempOut[]);
 
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
 /* Required constants for ANT channel configuration (Channel ID wildcards) */
 #define U8_ANT_CHANNEL_USERAPP (u8)ANT_CHANNEL_0 /* Channel 0 – 7 */
-#define U8_ANT_DEVICE_LO_USERAPP (u8)(1234 & 0xFF) /* Low byte of two-byte Device # */
-#define U8_ANT_DEVICE_HI_USERAPP (u8)(1234 >> 8) /* High byte of two-byte Device # */
+#define U8_ANT_DEVICE_LO_USERAPP (u8)(12345 & 0xFF) /* Low byte of two-byte Device # */
+#define U8_ANT_DEVICE_HI_USERAPP (u8)(12345 >> 8) /* High byte of two-byte Device # */
 #define U8_ANT_DEVICE_TYPE_USERAPP (u8)123 /* 1 – 255 */
 #define U8_ANT_TRANSMISSION_TYPE_USERAPP (u8)1 /* 1-127 (MSB is pairing bit) */
 #define U8_ANT_CHANNEL_PERIOD_LO_USERAPP (u8)(8134 & 0xFF) /* Low byte of two-byte channel period */

@@ -1,14 +1,14 @@
-"C:\Program Files\IAR Systems\EWARM_8_10_1\arm\bin\armproc.dll" 
+"C:\Program Files\IAR Systems\Embedded Workbench 9.2\arm\bin\armPROC.dll" 
 
-"C:\Program Files\IAR Systems\EWARM_8_10_1\arm\bin\armjlink2.dll" 
+"C:\Program Files\IAR Systems\Embedded Workbench 9.2\arm\bin\armJLINK.dll" 
 
-"D:\EiE\EiE Git\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\Debug\Exe\eie_dotmatrix.out" 
+"C:\Users\Aadi\OneDrive\Desktop\razor_sam3u2\firmware_dotmatrix\iar_8_20_1\Debug\Exe\eie_dotmatrix.out" 
 
---plugin "C:\Program Files\IAR Systems\EWARM_8_10_1\arm\bin\armbat.dll" 
+--plugin="C:\Program Files\IAR Systems\Embedded Workbench 9.2\arm\bin\armbat.dll" 
 
---device_macro "C:\Program Files\IAR Systems\EWARM_8_10_1\arm\config\debugger\Atmel\SAM3U.dmac" 
+--device_macro="C:\Program Files\IAR Systems\Embedded Workbench 9.2\arm/config/debugger/Microchip/SAM3U.dmac" 
 
---flash_loader "C:\Program Files\IAR Systems\EWARM_8_10_1\arm\config\flashloader\Atmel\sam3u2c\sam3u2c-flash.board" 
+--flash_loader="C:\Program Files\IAR Systems\Embedded Workbench 9.2\arm/config/flashloader/Microchip/sam3u2/sam3u2-flash.board" 
 
 
 
