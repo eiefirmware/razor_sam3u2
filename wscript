@@ -336,7 +336,7 @@ def get_jlink_srch_path():
         # conflicts with java's linker. User can still override with an explicit JLINK=... on the
         # command line.
         return [
-            "C:\\Program Files\\SEGGER\\JLink",
+            "C:\\Program Files\\SEGGER\\JLink_V798i",
             "C:\\Program Files (x86)\\SEGGER\\JLink",
         ] + paths
 
